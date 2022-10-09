@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using ContainerManager.Domain.Commands;
+﻿using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Models;
 using ContainerManager.Domain.Repositories;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 

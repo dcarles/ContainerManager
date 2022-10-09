@@ -1,15 +1,17 @@
 ﻿using MediatR;
 using System;
+using System.Collections.Generic;
 
 namespace ContainerManager.Domain.Commands
 {
-	public class DeleteCommand<T> : IRequest<Unit>
+	public class GetByUserIdQuery<T> : IRequest<IEnumerable<T>>
 	{
-		public DeleteCommand(Guid id)
+		public GetByUserIdQuery(Guid id)
 		{
 			Id = id;
 		}
 
 		public readonly Guid Id;
+
 	}
 }

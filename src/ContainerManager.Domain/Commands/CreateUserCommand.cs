@@ -2,11 +2,6 @@
 using ContainerManager.Domain.Services;
 using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContainerManager.Domain.Commands
 {
@@ -15,7 +10,7 @@ namespace ContainerManager.Domain.Commands
 		public CreateUserCommand()
 		{
 			Id = Guid.NewGuid();
-			ApiKey = ApiKeyGenerator.GenerateApiKey();		
+			ApiKey = ApiKeyGenerator.GenerateApiKey();
 		}
 
 		public string Email { get; set; }

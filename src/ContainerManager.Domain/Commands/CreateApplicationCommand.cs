@@ -2,9 +2,6 @@
 using MediatR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static ContainerManager.Domain.Models.Application;
 
 namespace ContainerManager.Domain.Commands
@@ -25,6 +22,8 @@ namespace ContainerManager.Domain.Commands
 		public Guid? MachineId { get; set; }
 
 		public readonly Guid Id;
+
+		public Guid OwnerId { get; set; }
 
 	}
 }

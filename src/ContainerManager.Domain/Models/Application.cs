@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContainerManager.Domain.Models
 {
@@ -11,7 +8,7 @@ namespace ContainerManager.Domain.Models
 		public string Name { get; set; }
 		public int Port { get; set; }
 		public string Image { get; set; }
-		public EntryPointSpecification EntryPoint { get; set; }		
+		public EntryPointSpecification EntryPoint { get; set; }
 		public ApplicationState State { get; set; }
 		public List<EnvironmentVariable> EnvironmentVariables { get; set; }
 		public ResourceLimitSpecification ResourceLimits { get; set; }
@@ -38,14 +35,14 @@ namespace ContainerManager.Domain.Models
 		}
 
 		public enum ApplicationState
-	{
-		Created,		
-		Running,
-		Removing,
-		Exited
-	}
+		{
+			Created,
+			Running,
+			Removing,
+			Exited
+		}
 
 	}
 
-	
+
 }

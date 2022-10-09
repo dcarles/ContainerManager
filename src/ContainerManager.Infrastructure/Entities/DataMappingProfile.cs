@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ContainerManager.Domain.Commands;
 
 namespace ContainerManager.Infrastructure.Entities
 {

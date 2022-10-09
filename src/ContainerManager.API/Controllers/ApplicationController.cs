@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,6 +29,18 @@ namespace ContainerManager.API.Controllers
 			_mediator = mediator;
 			_mapper = mapper;
 
+		}
+
+		// GET api/application?ownerId=80927d68-ce2c-4c89-9805-de92d81b7517
+		[HttpGet()]
+		public async Task<IActionResult> GetByOwner([FromQuery] Guid ownerId)
+		{
+			var applicationByUserIdQuery = new GetByUserIdQuery<Application>(ownerId);
+			var applicationsResponse = await _mediator.Send(applicationByUserIdQuery);
+			if (applicationsResponse != null && applicationsResponse.Any())
+				return Ok(applicationsResponse);
+			else
+				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "The user does not own any applications or user does not exists" });
 		}
 
 		// GET api/<UserController>/5
@@ -53,7 +65,7 @@ namespace ContainerManager.API.Controllers
 			var applicationUrl = $"{HttpContext.Request.GetEncodedUrl()}/{applicationResponse.Id}";
 			return Created(applicationUrl, applicationResponse);
 		}
-		
+
 
 		// DELETE api/<UserController>/5
 		[HttpDelete("{id}")]

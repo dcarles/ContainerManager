@@ -3,7 +3,6 @@ using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Models;
 using ContainerManager.Domain.Repositories;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +21,7 @@ namespace ContainerManager.Domain.Handlers
 
 		public async Task<User> Handle(CreateUserCommand request, CancellationToken cancellationToken)
 		{
-			var user =_mapper.Map<User>(request);
+			var user = _mapper.Map<User>(request);
 			await _repo.AddAsync(user);
 			return user;
 		}

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,7 +29,20 @@ namespace ContainerManager.API.Controllers
 			_mapper = mapper;
 		}
 
-		// GET api/<UserController>/5
+
+		// GET api/machine?ownerId=80927d68-ce2c-4c89-9805-de92d81b7517
+		[HttpGet()]
+		public async Task<IActionResult> GetByOwner([FromQuery] Guid ownerId)
+		{
+			var machineByIdQuery = new GetByUserIdQuery<Machine>(ownerId);
+			var machinesResponse = await _mediator.Send(machineByIdQuery);
+			if (machinesResponse != null && machinesResponse.Any())
+				return Ok(machinesResponse);
+			else
+				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "The user does not own any machines or user does not exists" });
+		}
+
+		// GET api/machine/5
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
@@ -41,7 +54,7 @@ namespace ContainerManager.API.Controllers
 				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "Machine requested does not Exists" });
 		}
 
-		// POST api/<UserController>
+		// POST api/machine
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] MachineRequest machineRequest)
 		{
@@ -53,7 +66,7 @@ namespace ContainerManager.API.Controllers
 		}
 
 
-		// DELETE api/<UserController>/5
+		// DELETE api/machine/5
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{

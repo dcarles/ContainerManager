@@ -7,6 +7,6 @@ namespace ContainerManager.API.ViewModels
 	{
 		public string Name { get; set; }
 		public OSType OS { get; set; }
-		internal Guid OwnerId { get; set; }
+		public Guid OwnerId { get; set; }
 	}
 }

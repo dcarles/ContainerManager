@@ -4,21 +4,13 @@ using ContainerManager.Domain.Repositories;
 using ContainerManager.Infrastructure.Entities;
 using ContainerManager.Infrastructure.Repositories;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ContainerManager.API
 {
@@ -41,7 +33,7 @@ namespace ContainerManager.API
 			services.AddValidatorsFromAssemblyContaining<Startup>();
 
 			services.AddControllers();
-		
+
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "ContainerManager.API", Version = "v1" });

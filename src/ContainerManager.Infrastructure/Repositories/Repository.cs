@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ContainerManager.Infrastructure.Repositories
@@ -54,7 +53,7 @@ namespace ContainerManager.Infrastructure.Repositories
 		public virtual async Task AddAsync(TEntity entity)
 		{
 			fakeDB.Add(entity);
-		}		
+		}
 
 		/// <summary>
 		/// Creates a <see cref="TEntity"/> entity 

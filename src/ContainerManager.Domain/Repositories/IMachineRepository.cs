@@ -9,7 +9,7 @@ namespace ContainerManager.Domain.Repositories
 	{
 		Task AddAsync(Machine machine);
 		Task<Machine> GetByIdAsync(Guid id);
-		Task<IEnumerable<Machine>> GetByOwner(Guid userId);	
+		Task<IEnumerable<Machine>> GetByOwner(Guid userId);
 		Task DeleteAsync(Guid id);
 	}
 }

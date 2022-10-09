@@ -8,7 +8,7 @@ namespace ContainerManager.API.ViewModels
 	{
 		public CommandMappingProfile()
 		{
-			CreateMap<CreateUserCommand, User >();
+			CreateMap<CreateUserCommand, User>();
 			CreateMap<CreateMachineCommand, Machine>();
 			CreateMap<CreateApplicationCommand, Application>();
 		}
