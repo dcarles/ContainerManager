@@ -33,9 +33,12 @@ namespace ContainerManager.API.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			var machineByIdQuery = new GetMachineByIdQuery(id);
+			var machineByIdQuery = new GetByIdQuery<Machine>(id);
 			var machineResponse = await _mediator.Send(machineByIdQuery);
-			return Ok(machineResponse);
+			if (machineResponse != null)
+				return Ok(machineResponse);
+			else
+				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "Machine requested does not Exists" });
 		}
 
 		// POST api/<UserController>
@@ -54,6 +57,8 @@ namespace ContainerManager.API.Controllers
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
+			var deleteCommand = new DeleteCommand<Machine>(id);
+			await _mediator.Send(deleteCommand);
 			return Ok();
 		}
 	}

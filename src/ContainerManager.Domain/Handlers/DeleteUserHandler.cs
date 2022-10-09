@@ -9,18 +9,19 @@ using System.Threading.Tasks;
 
 namespace ContainerManager.Domain.Handlers
 {
-	public class GetUserByIdHandler : IRequestHandler<GetByIdQuery<User>, User>
+	public class DeleteUserHandler : IRequestHandler<DeleteCommand<User>, Unit>
 	{
 		private readonly IUserRepository _repo;
 
-		public GetUserByIdHandler(IUserRepository repo)
+		public DeleteUserHandler(IUserRepository repo)
 		{
 			_repo = repo;
 		}
 
-		public async Task<User> Handle(GetByIdQuery<User> request, CancellationToken cancellationToken)
+		public async Task<Unit> Handle(DeleteCommand<User> request, CancellationToken cancellationToken)
 		{		
-			return await _repo.GetByIdAsync(request.Id);		
+			await _repo.DeleteAsync(request.Id);
+			return Unit.Value;
 		}
 	}
 }

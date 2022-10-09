@@ -10,14 +10,13 @@ using System.Threading.Tasks;
 
 namespace ContainerManager.Domain.Commands
 {
-	public class GetUserByIdQuery : IRequest<User>
+	public class DeleteCommand<T> : IRequest<Unit>
 	{
-		public GetUserByIdQuery(Guid id)
+		public DeleteCommand(Guid id)
 		{
 			Id = id;		
 		}
 
-		public readonly Guid Id;	
-
+		public readonly Guid Id;
 	}
 }

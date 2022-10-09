@@ -54,16 +54,17 @@ namespace ContainerManager.Infrastructure.Repositories
 		public virtual async Task AddAsync(TEntity entity)
 		{
 			fakeDB.Add(entity);
-		}
+		}		
 
 		/// <summary>
-		///  Updates a <see cref="TEntity"/> entity 
+		/// Creates a <see cref="TEntity"/> entity 
 		/// </summary>
-		/// <param name="entity">entity <see cref="TEntity"/> to be updated</param>
-		public virtual async Task UpdateAsync(TEntity entity)
+		/// <param name="entity">entity <see cref="TEntity"/> to be created</param>
+		public virtual async Task DeleteAsync(Guid id)
 		{
-			var entityDB = fakeDB.FirstOrDefault(x => x.Id == entity.Id);
-			entityDB = entity;
+			var temp = fakeDB;
+			temp.RemoveAll(s => s.Id == id);
+			fakeDB = temp.ToList();
 		}
 
 		private IEnumerable<TEntity> GetEntitiesByQuery(Expression<Func<TEntity, bool>> query)

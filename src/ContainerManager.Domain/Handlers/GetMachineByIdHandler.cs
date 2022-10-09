@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ContainerManager.Domain.Handlers
 {
-	public class GetMachineByIdHandler : IRequestHandler<GetMachineByIdQuery, Machine>
+	public class GetMachineByIdHandler : IRequestHandler<GetByIdQuery<Machine>, Machine>
 	{
 		private readonly IMachineRepository _repo;	
 
@@ -18,7 +18,7 @@ namespace ContainerManager.Domain.Handlers
 			_repo = repo;			
 		}
 
-		public async Task<Machine> Handle(GetMachineByIdQuery request, CancellationToken cancellationToken)
+		public async Task<Machine> Handle(GetByIdQuery<Machine> request, CancellationToken cancellationToken)
 		{
 			return await _repo.GetByIdAsync(request.Id);
 		}

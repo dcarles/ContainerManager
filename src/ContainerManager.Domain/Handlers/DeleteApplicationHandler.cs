@@ -9,18 +9,19 @@ using System.Threading.Tasks;
 
 namespace ContainerManager.Domain.Handlers
 {
-	public class GetApplicationByIdHandler : IRequestHandler<GetByIdQuery<Application>, Application>
+	public class DeleteApplicationHandler : IRequestHandler<DeleteCommand<Application>, Unit>
 	{
 		private readonly IApplicationRepository _repo;
 
-		public GetApplicationByIdHandler(IApplicationRepository repo)
+		public DeleteApplicationHandler(IApplicationRepository repo)
 		{
 			_repo = repo;
 		}
 
-		public async Task<Application> Handle(GetByIdQuery<Application> request, CancellationToken cancellationToken)
-		{
-			return await _repo.GetByIdAsync(request.Id);
+		public async Task<Unit> Handle(DeleteCommand<Application> request, CancellationToken cancellationToken)
+		{		
+			await _repo.DeleteAsync(request.Id);
+			return Unit.Value;
 		}
 	}
 }

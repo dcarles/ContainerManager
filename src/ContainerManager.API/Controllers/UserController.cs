@@ -34,9 +34,12 @@ namespace ContainerManager.API.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			var userQuery = new GetUserByIdQuery(id);
+			var userQuery = new GetByIdQuery<User>(id);
 			var userResponse = await _mediator.Send(userQuery);
-			return Ok(userResponse);
+			if (userResponse != null)
+				return Ok(userResponse);
+			else
+				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "User requested does not Exists" });
 		}
 
 		// POST api/<UserController>
@@ -48,12 +51,14 @@ namespace ContainerManager.API.Controllers
 			var userUrl = $"{HttpContext.Request.GetEncodedUrl()}/{userResponse.Id}";
 			return Created(userUrl, userResponse);
 		}
-		
+
 
 		// DELETE api/<UserController>/5
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
+			var deleteCommand = new DeleteCommand<User>(id);
+			await _mediator.Send(deleteCommand);
 			return Ok();
 		}
 	}

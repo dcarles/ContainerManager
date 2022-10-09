@@ -35,9 +35,12 @@ namespace ContainerManager.API.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			var applicationByIdQuery = new GetApplicationByIdQuery(id);
+			var applicationByIdQuery = new GetByIdQuery<Application>(id);
 			var applicationResponse = await _mediator.Send(applicationByIdQuery);
-			return Ok(applicationResponse);
+			if (applicationResponse != null)
+				return Ok(applicationResponse);
+			else
+				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "Application requested does not Exists" });
 		}
 
 		// POST api/<UserController>
@@ -56,6 +59,8 @@ namespace ContainerManager.API.Controllers
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{
+			var deleteCommand = new DeleteCommand<Application>(id);
+			await _mediator.Send(deleteCommand);
 			return Ok();
 		}
 	}

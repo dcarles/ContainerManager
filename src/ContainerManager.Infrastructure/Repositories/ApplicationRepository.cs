@@ -30,10 +30,9 @@ namespace ContainerManager.Infrastructure.Repositories
 			await base.AddAsync(_mapper.Map<Application>(app));
 		}
 
-		public async Task UpdateAsync(Domain.Models.Application app)
+		public new async Task DeleteAsync(Guid id)
 		{
-			await base.UpdateAsync(_mapper.Map<Application>(app));
+			await base.DeleteAsync(id);
 		}
-
 	}
 }

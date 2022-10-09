@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace ContainerManager.Domain.Commands
 {
-	public class GetApplicationByIdQuery : IRequest<Application>
+	public class GetByIdQuery<T>: IRequest<T>
 	{
-		public GetApplicationByIdQuery(Guid id)
+		public GetByIdQuery(Guid id)
 		{
 			Id = id;		
 		}

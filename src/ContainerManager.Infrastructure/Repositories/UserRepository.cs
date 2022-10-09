@@ -35,10 +35,9 @@ namespace ContainerManager.Infrastructure.Repositories
 			await base.AddAsync(_mapper.Map<User>(user));
 		}
 
-		public async Task UpdateAsync(Domain.Models.User user)
+		public new async Task DeleteAsync(Guid id)
 		{
-			await base.UpdateAsync(_mapper.Map<User>(user));
+			await base.DeleteAsync(id);
 		}
-
 	}
 }
