@@ -33,19 +33,22 @@ namespace ContainerManager.API.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			return Ok(new Machine());
+			var machineByIdQuery = new GetMachineByIdQuery(id);
+			var machineResponse = await _mediator.Send(machineByIdQuery);
+			return Ok(machineResponse);
 		}
 
 		// POST api/<UserController>
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] MachineRequest machineRequest)
 		{
+			//	machineRequest.OwnerId = Guid.Parse(User.Identity.Name);
 			var machineCommand = _mapper.Map<CreateMachineCommand>(machineRequest);
 			var machineResponse = await _mediator.Send(machineCommand);
 			var machineUrl = $"{HttpContext.Request.GetEncodedUrl()}/{machineResponse.Id}";
 			return Created(machineUrl, machineResponse);
 		}
-		
+
 
 		// DELETE api/<UserController>/5
 		[HttpDelete("{id}")]

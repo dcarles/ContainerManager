@@ -1,4 +1,5 @@
 ﻿using ContainerManager.Domain.Models;
+using System;
 
 namespace ContainerManager.API.ViewModels
 {
@@ -6,5 +7,6 @@ namespace ContainerManager.API.ViewModels
 	{
 		public string Name { get; set; }
 		public OSType OS { get; set; }
+		internal Guid OwnerId { get; set; }
 	}
 }

@@ -13,6 +13,7 @@ namespace ContainerManager.API.ViewModels
 		public List<EnvironmentVariable> EnvironmentVariables { get; set; }
 		public ResourceLimitSpecification ResourceLimits { get; set; }
 		public Guid? MachineId { get; set; }
+		internal Guid OwnerId { get; set; }
 	}
 
 }

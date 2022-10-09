@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace ContainerManager.Infrastructure.Entities
 {
-	internal class User : BaseEntity
+	public class User : BaseEntity
 	{
+		public string Email { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string ApiKey { get; set; }
 	}
 }

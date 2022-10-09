@@ -1,24 +1,23 @@
 ﻿using ContainerManager.Domain.Models;
+using ContainerManager.Domain.Services;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ContainerManager.Domain.Commands
 {
-	public class CreateMachineCommand : IRequest<Machine>
+	public class GetMachineByIdQuery : IRequest<Machine>
 	{
-		public CreateMachineCommand()
+		public GetMachineByIdQuery(Guid id)
 		{
-			Id = Guid.NewGuid();
+			Id = id;		
 		}
 
-		public string Name { get; set; }
-		public OSType OS { get; set; }
-
-		public readonly Guid Id;
+		public readonly Guid Id;	
 
 	}
 }

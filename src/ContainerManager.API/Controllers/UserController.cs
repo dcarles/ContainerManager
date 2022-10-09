@@ -34,7 +34,9 @@ namespace ContainerManager.API.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			return Ok(new User());
+			var userQuery = new GetUserByIdQuery(id);
+			var userResponse = await _mediator.Send(userQuery);
+			return Ok(userResponse);
 		}
 
 		// POST api/<UserController>

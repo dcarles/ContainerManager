@@ -24,7 +24,7 @@ namespace ContainerManager.Domain.Commands
 		public ResourceLimitSpecification ResourceLimits { get; set; }
 		public Guid? MachineId { get; set; }
 
-		internal readonly Guid Id;
+		public readonly Guid Id;
 
 	}
 }

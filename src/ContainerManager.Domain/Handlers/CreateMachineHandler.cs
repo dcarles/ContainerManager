@@ -1,5 +1,7 @@
-﻿using ContainerManager.Domain.Commands;
+﻿using AutoMapper;
+using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Models;
+using ContainerManager.Domain.Repositories;
 using MediatR;
 using System;
 using System.Threading;
@@ -9,14 +11,20 @@ namespace ContainerManager.Domain.Handlers
 {
 	public class CreateMachineHandler : IRequestHandler<CreateMachineCommand, Machine>
 	{
-		public Task<Machine> Handle(CreateMachineCommand request, CancellationToken cancellationToken)
-		{
-			var machine = new Machine();
-			machine.Name = request.Name;
-			machine.Id = request.Id;
-			machine.OS = request.OS;
+		private readonly IMachineRepository _repo;
+		private readonly IMapper _mapper;
 
-			return Task.FromResult(machine);
+		public CreateMachineHandler(IMachineRepository repo, IMapper mapper)
+		{
+			_repo = repo;
+			_mapper = mapper;
+		}
+
+		public async Task<Machine> Handle(CreateMachineCommand request, CancellationToken cancellationToken)
+		{
+			var machine = _mapper.Map<Machine>(request);
+			await _repo.AddAsync(machine);
+			return machine;
 		}
 	}
 }

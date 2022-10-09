@@ -1,6 +1,8 @@
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Handlers;
+using ContainerManager.Domain.Repositories;
 using ContainerManager.Infrastructure.Entities;
+using ContainerManager.Infrastructure.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -48,7 +50,11 @@ namespace ContainerManager.API
 			services.AddHealthChecks();
 
 			services.AddMediatR(typeof(CreateUserHandler).Assembly);
-			services.AddAutoMapper(typeof(ApiMappingProfile), typeof(DataMappingProfile));
+			services.AddAutoMapper(typeof(ApiMappingProfile), typeof(DataMappingProfile), typeof(CommandMappingProfile));
+
+			services.AddSingleton<IUserRepository, UserRepository>();
+			services.AddSingleton<IApplicationRepository, ApplicationRepository>();
+			services.AddSingleton<IMachineRepository, MachineRepository>();
 
 			services.AddHttpClient();
 		}

@@ -1,5 +1,7 @@
-﻿using ContainerManager.Domain.Commands;
+﻿using AutoMapper;
+using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Models;
+using ContainerManager.Domain.Repositories;
 using MediatR;
 using System;
 using System.Threading;
@@ -9,17 +11,20 @@ namespace ContainerManager.Domain.Handlers
 {
 	public class CreateApplicationHandler : IRequestHandler<CreateApplicationCommand, Application>
 	{
-		public Task<Application> Handle(CreateApplicationCommand request, CancellationToken cancellationToken)
-		{
-			var application = new Application();
-			application.Id = request.Id;
-			application.Name = request.Name;
-			application.EntryPoint = request.EntryPoint;
-			application.EnvironmentVariables = request.EnvironmentVariables;
-			application.Image = request.Image;
-			application.MachineId = request.MachineId;
+		private readonly IApplicationRepository _repo;
+		private readonly IMapper _mapper;
 
-			return Task.FromResult(application);
+		public CreateApplicationHandler(IApplicationRepository repo, IMapper mapper)
+		{
+			_repo = repo;
+			_mapper = mapper;
+		}
+
+		public async Task<Application> Handle(CreateApplicationCommand request, CancellationToken cancellationToken)
+		{
+			var application = _mapper.Map<Application>(request);		
+			await _repo.AddAsync(application);
+			return application;
 		}
 	}
 }

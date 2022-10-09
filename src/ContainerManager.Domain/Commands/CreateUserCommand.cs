@@ -22,9 +22,9 @@ namespace ContainerManager.Domain.Commands
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 
-		internal readonly Guid Id;
+		public readonly Guid Id;
 
-		internal readonly string ApiKey;
+		public readonly string ApiKey;
 
 	}
 }

@@ -1,5 +1,7 @@
-﻿using ContainerManager.Domain.Commands;
+﻿using AutoMapper;
+using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Models;
+using ContainerManager.Domain.Repositories;
 using MediatR;
 using System;
 using System.Threading;
@@ -9,18 +11,20 @@ namespace ContainerManager.Domain.Handlers
 {
 	public class CreateUserHandler : IRequestHandler<CreateUserCommand, User>
 	{
-		public Task<User> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+		private readonly IUserRepository _repo;
+		private readonly IMapper _mapper;
+
+		public CreateUserHandler(IUserRepository repo, IMapper mapper)
 		{
-			var user = new User();
-			user.Email = request.Email;
-			user.FirstName = request.FirstName;
-			user.LastName = request.LastName;
-			user.Id = request.Id;
-			user.ApiKey = request.ApiKey;
+			_repo = repo;
+			_mapper = mapper;
+		}
 
-			
-
-			return Task.FromResult(user);
+		public async Task<User> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+		{
+			var user =_mapper.Map<User>(request);
+			await _repo.AddAsync(user);
+			return user;
 		}
 	}
 }

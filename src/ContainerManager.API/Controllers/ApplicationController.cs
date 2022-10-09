@@ -35,13 +35,16 @@ namespace ContainerManager.API.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
-			return Ok(new Application());
+			var applicationByIdQuery = new GetApplicationByIdQuery(id);
+			var applicationResponse = await _mediator.Send(applicationByIdQuery);
+			return Ok(applicationResponse);
 		}
 
 		// POST api/<UserController>
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] ApplicationRequest appRequest)
 		{
+			//appRequest.OwnerId = Guid.Parse(User.Identity.Name);
 			var applicationCommand = _mapper.Map<CreateApplicationCommand>(appRequest);
 			var applicationResponse = await _mediator.Send(applicationCommand);
 			var applicationUrl = $"{HttpContext.Request.GetEncodedUrl()}/{applicationResponse.Id}";
