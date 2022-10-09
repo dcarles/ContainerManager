@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using ContainerManager.API.Auth;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -32,8 +34,10 @@ namespace ContainerManager.API.Controllers
 
 		// GET api/machine?ownerId=80927d68-ce2c-4c89-9805-de92d81b7517
 		[HttpGet()]
-		public async Task<IActionResult> GetByOwner([FromQuery] Guid ownerId)
+		[Authorize]
+		public async Task<IActionResult> Get()
 		{
+			var ownerId = Guid.Parse(User.Identity.Name);
 			var machineByIdQuery = new GetByUserIdQuery<Machine>(ownerId);
 			var machinesResponse = await _mediator.Send(machineByIdQuery);
 			if (machinesResponse != null && machinesResponse.Any())
@@ -44,6 +48,7 @@ namespace ContainerManager.API.Controllers
 
 		// GET api/machine/5
 		[HttpGet("{id}")]
+		[Authorize]
 		public async Task<IActionResult> Get(Guid id)
 		{
 			var machineByIdQuery = new GetByIdQuery<Machine>(id);
@@ -56,10 +61,11 @@ namespace ContainerManager.API.Controllers
 
 		// POST api/machine
 		[HttpPost]
+		[Authorize]
 		public async Task<IActionResult> Post([FromBody] MachineRequest machineRequest)
-		{
-			//	machineRequest.OwnerId = Guid.Parse(User.Identity.Name);
+		{			
 			var machineCommand = _mapper.Map<CreateMachineCommand>(machineRequest);
+			machineCommand.OwnerId = Guid.Parse(User.Identity.Name);
 			var machineResponse = await _mediator.Send(machineCommand);
 			var machineUrl = $"{HttpContext.Request.GetEncodedUrl()}/{machineResponse.Id}";
 			return Created(machineUrl, machineResponse);
@@ -68,6 +74,7 @@ namespace ContainerManager.API.Controllers
 
 		// DELETE api/machine/5
 		[HttpDelete("{id}")]
+		[Authorize(Policy = Policies.OnlyApiOwners)]
 		public async Task<IActionResult> Delete(Guid id)
 		{
 			var deleteCommand = new DeleteCommand<Machine>(id);

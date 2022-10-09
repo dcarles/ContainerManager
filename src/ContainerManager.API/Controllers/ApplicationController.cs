@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using ContainerManager.API.Auth;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -33,8 +35,10 @@ namespace ContainerManager.API.Controllers
 
 		// GET api/application?ownerId=80927d68-ce2c-4c89-9805-de92d81b7517
 		[HttpGet()]
-		public async Task<IActionResult> GetByOwner([FromQuery] Guid ownerId)
+		[Authorize]
+		public async Task<IActionResult> Get()
 		{
+			var ownerId = Guid.Parse(User.Identity.Name);
 			var applicationByUserIdQuery = new GetByUserIdQuery<Application>(ownerId);
 			var applicationsResponse = await _mediator.Send(applicationByUserIdQuery);
 			if (applicationsResponse != null && applicationsResponse.Any())
@@ -45,6 +49,7 @@ namespace ContainerManager.API.Controllers
 
 		// GET api/<UserController>/5
 		[HttpGet("{id}")]
+		[Authorize]
 		public async Task<IActionResult> Get(Guid id)
 		{
 			var applicationByIdQuery = new GetByIdQuery<Application>(id);
@@ -57,10 +62,12 @@ namespace ContainerManager.API.Controllers
 
 		// POST api/<UserController>
 		[HttpPost]
+		[Authorize]
 		public async Task<IActionResult> Post([FromBody] ApplicationRequest appRequest)
 		{
-			//appRequest.OwnerId = Guid.Parse(User.Identity.Name);
+		
 			var applicationCommand = _mapper.Map<CreateApplicationCommand>(appRequest);
+			applicationCommand.OwnerId = Guid.Parse(User.Identity.Name);
 			var applicationResponse = await _mediator.Send(applicationCommand);
 			var applicationUrl = $"{HttpContext.Request.GetEncodedUrl()}/{applicationResponse.Id}";
 			return Created(applicationUrl, applicationResponse);
@@ -69,6 +76,7 @@ namespace ContainerManager.API.Controllers
 
 		// DELETE api/<UserController>/5
 		[HttpDelete("{id}")]
+		[Authorize(Policy = Policies.OnlyApiOwners)]
 		public async Task<IActionResult> Delete(Guid id)
 		{
 			var deleteCommand = new DeleteCommand<Application>(id);

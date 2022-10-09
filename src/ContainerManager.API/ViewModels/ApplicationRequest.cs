@@ -12,8 +12,7 @@ namespace ContainerManager.API.ViewModels
 		public EntryPointSpecification EntryPoint { get; set; }
 		public List<EnvironmentVariable> EnvironmentVariables { get; set; }
 		public ResourceLimitSpecification ResourceLimits { get; set; }
-		public Guid? MachineId { get; set; }
-		public Guid OwnerId { get; set; }
+		public Guid? MachineId { get; set; }		
 	}
 
 }

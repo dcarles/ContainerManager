@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ContainerManager.API.Auth;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Models;
@@ -31,6 +32,7 @@ namespace ContainerManager.API.Controllers
 		}
 
 		// GET api/User/5
+		[Authorize]
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid id)
 		{
@@ -56,6 +58,7 @@ namespace ContainerManager.API.Controllers
 
 
 		// DELETE api/User/5
+		[Authorize(Policy = Policies.OnlyApiOwners)]
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(Guid id)
 		{

@@ -1,3 +1,4 @@
+using ContainerManager.API.Auth;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Handlers;
 using ContainerManager.Domain.Repositories;
@@ -5,6 +6,7 @@ using ContainerManager.Infrastructure.Entities;
 using ContainerManager.Infrastructure.Repositories;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -48,6 +50,20 @@ namespace ContainerManager.API
 			services.AddSingleton<IApplicationRepository, ApplicationRepository>();
 			services.AddSingleton<IMachineRepository, MachineRepository>();
 
+			services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme = ApiKeyAuthenticationOptions.DefaultScheme;
+				options.DefaultChallengeScheme = ApiKeyAuthenticationOptions.DefaultScheme;
+			})
+			.AddApiKeySupport(options => { });
+
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy(Policies.OnlyApiOwners, policy => policy.Requirements.Add(new OnlyApiOwnersRequirement()));				
+			});
+
+			services.AddSingleton<IAuthorizationHandler, OnlyApiOwnersAuthorizationHandler>();
+
 			services.AddHttpClient();
 		}
 
@@ -65,6 +81,7 @@ namespace ContainerManager.API
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>

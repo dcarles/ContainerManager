@@ -1,4 +1,6 @@
-﻿namespace ContainerManager.Infrastructure.Entities
+﻿using static ContainerManager.Domain.Models.User;
+
+namespace ContainerManager.Infrastructure.Entities
 {
 	public class User : BaseEntity
 	{
@@ -6,5 +8,6 @@
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public string ApiKey { get; set; }
+		public UserRole Role { get; set; }
 	}
 }
