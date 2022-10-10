@@ -8,6 +8,7 @@ namespace ContainerManager.Domain.Models
 		public string Name { get; set; }
 		public OSType OS { get; set; }
 		public Guid OwnerId { get; set; }
+		public User Owner { get; set; }
 		public List<Application> Applications { get; set; }
 
 	}

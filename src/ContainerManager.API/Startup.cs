@@ -2,6 +2,7 @@ using ContainerManager.API.Auth;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Handlers;
 using ContainerManager.Domain.Repositories;
+using ContainerManager.Infrastructure;
 using ContainerManager.Infrastructure.Entities;
 using ContainerManager.Infrastructure.Repositories;
 using FluentValidation;
@@ -9,6 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,6 +34,12 @@ namespace ContainerManager.API
 			.AddMvcCore()
 			.AddAuthorization();
 
+			services.AddHealthChecks();
+
+			services.AddDbContext<ContainerManagerDbContext>(c =>
+			  c.UseSqlServer(Configuration.GetConnectionString("ContainersManagerDBConnectionString")));
+	
+
 			services.AddValidatorsFromAssemblyContaining<Startup>();
 
 			services.AddControllers();
@@ -46,9 +54,9 @@ namespace ContainerManager.API
 			services.AddMediatR(typeof(CreateUserHandler).Assembly);
 			services.AddAutoMapper(typeof(ApiMappingProfile), typeof(DataMappingProfile), typeof(CommandMappingProfile));
 
-			services.AddSingleton<IUserRepository, UserRepository>();
-			services.AddSingleton<IApplicationRepository, ApplicationRepository>();
-			services.AddSingleton<IMachineRepository, MachineRepository>();
+			services.AddScoped<IUserRepository, UserRepository>();
+			services.AddScoped<IApplicationRepository, ApplicationRepository>();
+			services.AddScoped<IMachineRepository, MachineRepository>();
 
 			services.AddAuthentication(options =>
 			{

@@ -65,9 +65,9 @@ namespace ContainerManager.API.Controllers
 		[Authorize]
 		public async Task<IActionResult> Post([FromBody] ApplicationRequest appRequest)
 		{
-		
 			var applicationCommand = _mapper.Map<CreateApplicationCommand>(appRequest);
 			applicationCommand.OwnerId = Guid.Parse(User.Identity.Name);
+			applicationCommand.MachineId = appRequest.MachineId;
 			var applicationResponse = await _mediator.Send(applicationCommand);
 			var applicationUrl = $"{HttpContext.Request.GetEncodedUrl()}/{applicationResponse.Id}";
 			return Created(applicationUrl, applicationResponse);

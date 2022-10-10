@@ -9,6 +9,7 @@ namespace ContainerManager.Infrastructure.Entities
 		public string Name { get; set; }
 		public OSType OS { get; set; }
 		public Guid OwnerId { get; set; }
-		public List<Application> Applications { get; set; }
+		public virtual User Owner { get; set; }
+		public virtual List<Application> Applications { get; set; }
 	}
 }

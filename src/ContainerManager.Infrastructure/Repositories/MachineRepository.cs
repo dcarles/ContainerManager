@@ -11,7 +11,7 @@ namespace ContainerManager.Infrastructure.Repositories
 	{
 		private readonly IMapper _mapper;
 
-		public MachineRepository(IMapper mmachineer) : base() => _mapper = mmachineer;
+		public MachineRepository(IMapper mmachineer, ContainerManagerDbContext dbContext) : base(dbContext) => _mapper = mmachineer;
 
 
 		public new async Task<Domain.Models.Machine> GetByIdAsync(Guid id)
@@ -21,7 +21,7 @@ namespace ContainerManager.Infrastructure.Repositories
 
 		public async Task<IEnumerable<Domain.Models.Machine>> GetByOwner(Guid userId)
 		{
-			return _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.OwnerId == userId));
+			return _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.Owner.Id == userId));
 		}
 
 		public async Task AddAsync(Domain.Models.Machine machine)
@@ -29,9 +29,9 @@ namespace ContainerManager.Infrastructure.Repositories
 			await base.AddAsync(_mapper.Map<Machine>(machine));
 		}
 
-		public new async Task DeleteAsync(Guid id)
+		public async Task DeleteAsync(Guid id)
 		{
-			await base.DeleteAsync(id);
+			await base.DeleteAsync(new Machine { Id = id });
 		}
 	}
 }

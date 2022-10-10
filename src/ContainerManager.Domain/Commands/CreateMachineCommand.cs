@@ -16,6 +16,7 @@ namespace ContainerManager.Domain.Commands
 
 		public readonly Guid Id;
 		public Guid OwnerId { get; set; }
+		public User Owner { get; set; }
 
 	}
 }

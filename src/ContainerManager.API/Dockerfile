@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
 
 ARG BUILDCONFIG=RELEASE
 ARG VERSION=1.0.0
@@ -26,7 +26,7 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
 
 # build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS base
 FROM base AS final
 RUN apk add --no-cache icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib
 WORKDIR /app

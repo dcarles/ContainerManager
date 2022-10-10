@@ -10,7 +10,7 @@ namespace ContainerManager.Infrastructure.Repositories
 	{
 		private readonly IMapper _mapper;
 
-		public UserRepository(IMapper mapper) : base() => _mapper = mapper;
+		public UserRepository(IMapper mapper, ContainerManagerDbContext dbContext) : base(dbContext) => _mapper = mapper;
 
 
 		public new async Task<Domain.Models.User> GetByIdAsync(Guid id)
@@ -33,9 +33,9 @@ namespace ContainerManager.Infrastructure.Repositories
 			await base.AddAsync(_mapper.Map<User>(user));
 		}
 
-		public new async Task DeleteAsync(Guid id)
+		public async Task DeleteAsync(Guid id)
 		{
-			await base.DeleteAsync(id);
+			await base.DeleteAsync(new User { Id = id });
 		}
 	}
 }
