@@ -21,7 +21,7 @@ namespace ContainerManager.Infrastructure.Repositories
 
 		public async Task<IEnumerable<Domain.Models.Machine>> GetByOwner(Guid userId)
 		{
-			return _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.Owner.Id == userId));
+			return _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.OwnerId == userId));
 		}
 
 		public async Task AddAsync(Domain.Models.Machine machine)
