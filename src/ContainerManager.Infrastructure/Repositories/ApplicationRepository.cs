@@ -26,9 +26,9 @@ namespace ContainerManager.Infrastructure.Repositories
 
 		}
 
-		public async Task<IEnumerable<Domain.Models.Application>> GetByName(string name)
+		public async Task<Domain.Models.Application> GetByName(string name)
 		{
-			return _mapper.Map<IEnumerable<Domain.Models.Application>>(await GetByQueryAsync(m => m.Name == name));
+			return _mapper.Map<Domain.Models.Application>(await GetSingleByQueryAsync(m => m.Name == name));
 		}
 
 		public async Task AddAsync(Domain.Models.Application app)

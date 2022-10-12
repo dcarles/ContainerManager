@@ -25,9 +25,9 @@ namespace ContainerManager.Infrastructure.Repositories
 			return _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.OwnerId == userId));
 		}
 
-		public async Task<IEnumerable<Domain.Models.Machine>> GetByName(string name)
+		public async Task<Domain.Models.Machine> GetByName(string name)
 		{
-			return _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.Name == name));
+			return _mapper.Map<Domain.Models.Machine>(await GetSingleByQueryAsync(m => m.Name == name));
 		}
 
 		public async Task AddAsync(Domain.Models.Machine machine)
