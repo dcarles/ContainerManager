@@ -15,19 +15,16 @@ namespace ContainerManager.Domain.Models
 		public int CPULimit { get; set; }
 		public int MemoryMBLimit { get; set; }
 		public Guid OwnerId { get; set; }
-		public Guid? MachineId { get; set; }
-		public User Owner { get; set; }
-		public Machine Machine { get; set; }
+		public Guid? MachineId { get; set; }	
 
+	}
 
-		public enum ApplicationState
-		{
-			Created,
-			Running,
-			Removing,
-			Exited
-		}
-
+	public enum ApplicationState
+	{
+		Created,
+		Running,
+		Removing,
+		Exited
 	}
 
 

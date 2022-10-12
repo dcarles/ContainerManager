@@ -2,6 +2,7 @@
 using ContainerManager.API.Auth;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Commands;
+using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -63,12 +64,20 @@ namespace ContainerManager.API.Controllers
 		[HttpPost]
 		[Authorize]
 		public async Task<IActionResult> Post([FromBody] MachineRequest machineRequest)
-		{			
+		{
 			var machineCommand = _mapper.Map<CreateMachineCommand>(machineRequest);
 			machineCommand.OwnerId = Guid.Parse(User.Identity.Name);
-			var machineResponse = await _mediator.Send(machineCommand);
-			var machineUrl = $"{HttpContext.Request.GetEncodedUrl()}/{machineResponse.Id}";
-			return Created(machineUrl, machineResponse);
+
+			try
+			{
+				var machineResponse = await _mediator.Send(machineCommand);
+				var machineUrl = $"{HttpContext.Request.GetEncodedUrl()}/{machineResponse.Id}";
+				return Created(machineUrl, machineResponse);
+			}
+			catch (RecordAlreadyExistsException ex)
+			{
+				return new ConflictObjectResult(new ErrorResponse { StatusCode = 409, Message = ex.Message });
+			}
 		}
 
 

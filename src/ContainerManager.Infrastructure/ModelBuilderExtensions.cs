@@ -16,7 +16,7 @@ namespace ContainerManager.Infrastructure
                     Email = "danielcarles@gmail.com",
                     FirstName = "Daniel",
                     LastName = "Carles",
-                    Role = Domain.Models.User.UserRole.ApiOwner
+                    Role = Domain.Models.UserRole.ApiOwner
                 }, new User
                 {
                     Id = new Guid("9a484f14-3234-440d-bf99-3fcf2adeaf95"),
@@ -24,7 +24,7 @@ namespace ContainerManager.Infrastructure
                     Email = "danielcarles-consumer@gmail.com",
                     FirstName = "Daniel",
                     LastName = "Carles",
-                    Role = Domain.Models.User.UserRole.Consumer
+                    Role = Domain.Models.UserRole.Consumer
                 }
             ); 
 

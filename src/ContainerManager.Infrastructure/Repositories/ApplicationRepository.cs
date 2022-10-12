@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Repositories;
 using ContainerManager.Infrastructure.Entities;
 using System;
@@ -22,16 +23,27 @@ namespace ContainerManager.Infrastructure.Repositories
 		public async Task<IEnumerable<Domain.Models.Application>> GetByOwner(Guid userId)
 		{
 			return _mapper.Map<IEnumerable<Domain.Models.Application>>(await GetByQueryAsync(m => m.OwnerId == userId));
+
+		}
+
+		public async Task<IEnumerable<Domain.Models.Application>> GetByName(string name)
+		{
+			return _mapper.Map<IEnumerable<Domain.Models.Application>>(await GetByQueryAsync(m => m.Name == name));
 		}
 
 		public async Task AddAsync(Domain.Models.Application app)
 		{
+			var existing = await GetByName(app.Name);
+
+			if (existing != null)
+				throw new RecordAlreadyExistsException($"Application with Name '{app.Name}' already exists");
+
 			await base.AddAsync(_mapper.Map<Application>(app));
 		}
 
 		public async Task DeleteAsync(Guid id)
 		{
-			await base.DeleteAsync(new Application { Id = id});
+			await base.DeleteAsync(new Application { Id = id });
 		}
 	}
 }

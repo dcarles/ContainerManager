@@ -2,6 +2,7 @@
 using ContainerManager.API.Auth;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Commands;
+using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -67,10 +68,17 @@ namespace ContainerManager.API.Controllers
 		{
 			var applicationCommand = _mapper.Map<CreateApplicationCommand>(appRequest);
 			applicationCommand.OwnerId = Guid.Parse(User.Identity.Name);
-			applicationCommand.MachineId = appRequest.MachineId;
-			var applicationResponse = await _mediator.Send(applicationCommand);
-			var applicationUrl = $"{HttpContext.Request.GetEncodedUrl()}/{applicationResponse.Id}";
-			return Created(applicationUrl, applicationResponse);
+			try
+			{
+				var applicationResponse = await _mediator.Send(applicationCommand);
+				var applicationUrl = $"{HttpContext.Request.GetEncodedUrl()}/{applicationResponse.Id}";
+				return Created(applicationUrl, applicationResponse);
+			}
+			catch (RecordAlreadyExistsException ex)
+			{
+				return new ConflictObjectResult(new ErrorResponse { StatusCode = 409, Message = ex.Message });
+			}
+
 		}
 
 

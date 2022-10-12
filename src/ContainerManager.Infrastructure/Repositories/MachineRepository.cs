@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Repositories;
 using ContainerManager.Infrastructure.Entities;
 using System;
@@ -11,7 +12,7 @@ namespace ContainerManager.Infrastructure.Repositories
 	{
 		private readonly IMapper _mapper;
 
-		public MachineRepository(IMapper mmachineer, ContainerManagerDbContext dbContext) : base(dbContext) => _mapper = mmachineer;
+		public MachineRepository(IMapper mapper, ContainerManagerDbContext dbContext) : base(dbContext) => _mapper = mapper;
 
 
 		public new async Task<Domain.Models.Machine> GetByIdAsync(Guid id)
@@ -24,8 +25,18 @@ namespace ContainerManager.Infrastructure.Repositories
 			return _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.OwnerId == userId));
 		}
 
+		public async Task<IEnumerable<Domain.Models.Machine>> GetByName(string name)
+		{
+			return _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.Name == name));
+		}
+
 		public async Task AddAsync(Domain.Models.Machine machine)
 		{
+			var existing = await GetByName(machine.Name);
+
+			if (existing != null)
+				throw new RecordAlreadyExistsException($"Machine with Name '{machine.Name}' already exists");			
+
 			await base.AddAsync(_mapper.Map<Machine>(machine));
 		}
 

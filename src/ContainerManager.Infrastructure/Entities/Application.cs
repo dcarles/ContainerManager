@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using static ContainerManager.Domain.Models.Application;
+﻿using ContainerManager.Domain.Models;
 
 namespace ContainerManager.Infrastructure.Entities
 {
@@ -16,9 +14,7 @@ namespace ContainerManager.Infrastructure.Entities
 		public int CPULimit { get; set; }
 		public int MemoryMBLimit { get; set; }
 		public Guid OwnerId { get; set; }
-		public Guid? MachineId { get; set; }
-		public virtual User Owner { get; set; }
-		public virtual Machine Machine { get; set; }
+		public Guid? MachineId { get; set; }	
 
 	}
 }

@@ -1,4 +1,5 @@
-﻿using ContainerManager.Infrastructure.Entities;
+﻿using ContainerManager.Domain.Exceptions;
+using ContainerManager.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace ContainerManager.Infrastructure.Repositories
 {
 	public class Repository<TEntity> where TEntity : BaseEntity
 	{
-        private readonly ContainerManagerDbContext _dbContext;
+        protected readonly ContainerManagerDbContext _dbContext;
 
         public Repository(ContainerManagerDbContext dbContext)
         {
@@ -52,7 +53,7 @@ namespace ContainerManager.Infrastructure.Repositories
         /// </summary>
         /// <param name="entity">entity <see cref="TEntity"/> to be created</param>
         public virtual async Task AddAsync(TEntity entity)
-        {
+        {   
             await _dbContext.Set<TEntity>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
         }
@@ -69,7 +70,7 @@ namespace ContainerManager.Infrastructure.Repositories
 
         private IQueryable<TEntity> GetEntitiesByQuery(Expression<Func<TEntity, bool>> query)
         {
-            return _dbContext.Set<TEntity>().AsNoTracking().Where(query);
+            return _dbContext.Set<TEntity>().Where(query);
         }
 
         public virtual async Task DeleteAsync(TEntity entity)

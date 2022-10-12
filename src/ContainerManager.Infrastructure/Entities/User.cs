@@ -1,4 +1,4 @@
-﻿using static ContainerManager.Domain.Models.User;
+﻿using ContainerManager.Domain.Models;
 
 namespace ContainerManager.Infrastructure.Entities
 {

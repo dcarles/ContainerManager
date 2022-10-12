@@ -15,8 +15,7 @@ namespace ContainerManager.Domain.Commands
 		public OSType OS { get; set; }
 
 		public readonly Guid Id;
-		public Guid OwnerId { get; set; }
-		public User Owner { get; set; }
+		public Guid OwnerId { get; set; }		
 
 	}
 }

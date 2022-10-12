@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ContainerManager.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
-using static ContainerManager.Domain.Models.User;
 
 namespace ContainerManager.API.Auth
 {	

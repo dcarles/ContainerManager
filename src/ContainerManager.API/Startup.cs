@@ -1,4 +1,5 @@
 using ContainerManager.API.Auth;
+using ContainerManager.API.Helpers;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Handlers;
 using ContainerManager.Domain.Repositories;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 namespace ContainerManager.API
 {
@@ -42,7 +44,12 @@ namespace ContainerManager.API
 
 			services.AddValidatorsFromAssemblyContaining<Startup>();
 
-			services.AddControllers();
+			services.AddControllers().AddJsonOptions(options =>
+			{
+				options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
+				options.JsonSerializerOptions.Converters.Add(new JsonStringConverter());
+			});
 
 			services.AddSwaggerGen(c =>
 			{
@@ -71,6 +78,8 @@ namespace ContainerManager.API
 			});
 
 			services.AddSingleton<IAuthorizationHandler, OnlyApiOwnersAuthorizationHandler>();
+
+			
 
 			services.AddHttpClient();
 		}

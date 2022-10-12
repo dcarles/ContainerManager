@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Repositories;
 using ContainerManager.Infrastructure.Entities;
 using System;
@@ -30,6 +31,11 @@ namespace ContainerManager.Infrastructure.Repositories
 
 		public async Task AddAsync(Domain.Models.User user)
 		{
+			var existing = await GetByEmail(user.Email);
+
+			if (existing != null)
+				throw new RecordAlreadyExistsException($"A user with email '{user.Email}' already exists");
+
 			await base.AddAsync(_mapper.Map<User>(user));
 		}
 

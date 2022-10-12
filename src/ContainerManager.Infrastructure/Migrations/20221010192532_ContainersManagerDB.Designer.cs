@@ -57,8 +57,8 @@ namespace ContainerManager.Infrastructure.Migrations
                     b.Property<int>("Port")
                         .HasColumnType("int");
 
-                    b.Property<int>("State")
-                        .HasColumnType("int");
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("WorkingDirectory")
                         .HasColumnType("nvarchar(max)");
@@ -85,8 +85,8 @@ namespace ContainerManager.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("OS")
-                        .HasColumnType("int");
+                    b.Property<string>("OS")
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid?>("OwnerId")
                         .HasColumnType("uniqueidentifier");
@@ -120,8 +120,8 @@ namespace ContainerManager.Infrastructure.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -143,7 +143,7 @@ namespace ContainerManager.Infrastructure.Migrations
                             Email = "danielcarles@gmail.com",
                             FirstName = "Daniel",
                             LastName = "Carles",
-                            Role = 1
+                            Role = "ApiOwner"
                         },
                         new
                         {
@@ -152,7 +152,7 @@ namespace ContainerManager.Infrastructure.Migrations
                             Email = "danielcarles-consumer@gmail.com",
                             FirstName = "Daniel",
                             LastName = "Carles",
-                            Role = 0
+                            Role = "Consumer"
                         });
                 });
 

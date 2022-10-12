@@ -2,6 +2,7 @@
 using ContainerManager.API.Auth;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Commands;
+using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -47,13 +48,20 @@ namespace ContainerManager.API.Controllers
 
 		// POST api/User
 		[AllowAnonymous]
-		[HttpPost]		
+		[HttpPost]
 		public async Task<IActionResult> Register([FromBody] UserRequest userRequest)
 		{
 			var userCommand = _mapper.Map<CreateUserCommand>(userRequest);
-			var userResponse = await _mediator.Send(userCommand);
-			var userUrl = $"{HttpContext.Request.GetEncodedUrl()}/{userResponse.Id}";
-			return Created(userUrl, userResponse);
+			try
+			{
+				var userResponse = await _mediator.Send(userCommand);
+				var userUrl = $"{HttpContext.Request.GetEncodedUrl()}/{userResponse.Id}";
+				return Created(userUrl, userResponse);
+			}
+			catch (RecordAlreadyExistsException ex)
+			{
+				return new ConflictObjectResult(new ErrorResponse { StatusCode = 409, Message = ex.Message });
+			}
 		}
 
 
