@@ -70,7 +70,9 @@ POST http://localhost:55100/api/user
 ```
 ######  HTTP Response Codes
 203 - CREATED  : User created successfully
+
 400 - BAD REQUEST: Validation errors
+
 409 - CONFLICT : If there is already a user with the same email
 
 ##### As a [User]; I should be able to create a [Machine] definition which I own
@@ -84,7 +86,9 @@ HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 ```
 ######  HTTP Response Codes
 203 - CREATED  : Machine created successfully
+
 400 - BAD REQUEST: Validation errors
+
 409 - CONFLICT : If there is already a machine with the same name
 
 ##### As a [User]; I should be able to create an [Application] definition which I own.
@@ -104,7 +108,9 @@ HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 ```
 ######  HTTP Response Codes
 203 - CREATED  : Application created successfully
+
 400 - BAD REQUEST: Validation errors
+
 409 - CONFLICT : If there is already an application with the same name
 
 ##### As a [User]; I should be able to create an [Application] that can be ran on a [Machine]
@@ -117,7 +123,9 @@ HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 ```
 ######  HTTP Response Codes
 200 - OK  : Application updated successfully
+
 400 - BAD REQUEST: Validation errors
+
 404 - NOT FOUND : If either machine or application not found
 
 ##### As a [User]; I should be able to query the API for information about my [Application(s)] and [Machine(s)]
@@ -139,6 +147,29 @@ HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 See above for endpoints to create entities. Just replace the api key with testOwnerApiKey3264 to use as an Api Owner
 
 ##### An API owner should be able to  remove [User(s)], [Machine(s)] and [Application(s)]
+DELETE http://localhost:55100/api/application/{applicationId}
+HEADER 'X-Api-Key': 'testOwnerApiKey3264'
+
+######  HTTP Response Codes
+200 - OK  : Application deleted successfully
+
+404 - NOT FOUND : Application not found
+
+DELETE http://localhost:55100/api/machine/{machineId}
+HEADER 'X-Api-Key': 'testOwnerApiKey3264'
+
+######  HTTP Response Codes
+200 - OK  : Machine deleted successfully
+
+404 - NOT FOUND : Machine not found
+
+DELETE http://localhost:55100/api/user/{userId}
+HEADER 'X-Api-Key': 'testOwnerApiKey3264'
+
+######  HTTP Response Codes
+200 - OK  : User deleted successfully
+
+404 - NOT FOUND : User not found
 
 I have added a Postman Collection export file in the main solution, which has set of requests for Consumer and API Owner for your convenience (Delete endpoints are using apiOwner default apiKey, Register user endpoint has no authentication, and all the other endpoints use a consumer default api key). You can import this file to your Postman environment and use the pre-defined requests to test.
 
@@ -222,7 +253,7 @@ The test project has different classes that consists unit tests for each compone
 
 There are 2 containers which are api and ms-sql. In User Testing section, I give details about how these containers should be started. There are 2 compose files one is for only ms-sql and the other is for the api. There are also 2 Docker files in api project and in the docker-setup\ms-sql folder.
 
-###  What I would have done with more time
+##  What I would have done with more time
  * More tests, there are sufficient tests but not all cases/code is covered, and also there are no integration tests.
  * Better error handling and logging, at the moment there is not very much of this.
  * Better validations at the moment is very basic.
