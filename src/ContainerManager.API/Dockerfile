@@ -9,7 +9,7 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
 # copy csproj and restore as distinct layers
 COPY ./src/ContainerManager.API/ContainerManager.API.csproj ./ContainerManager.API/
-COPY ./src/ContainerManager.Domain/ContainerManager.Domain.csproj ./ContainerManager.PaymentsCore/
+COPY ./src/ContainerManager.Domain/ContainerManager.Domain.csproj ./ContainerManager.Domain/
 COPY ./src/ContainerManager.Infrastructure/ContainerManager.Infrastructure.csproj ./ContainerManager.Infrastructure/
 
 RUN dotnet restore ContainerManager.API/ContainerManager.API.csproj

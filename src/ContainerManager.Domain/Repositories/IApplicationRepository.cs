@@ -11,5 +11,6 @@ namespace ContainerManager.Domain.Repositories
 		Task<Application> GetByIdAsync(Guid id);
 		Task<IEnumerable<Application>> GetByOwner(Guid userId);
 		Task DeleteAsync(Guid id);
+		Task UpdateAsync(Application app);
 	}
 }

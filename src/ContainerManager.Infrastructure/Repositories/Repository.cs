@@ -28,6 +28,11 @@ namespace ContainerManager.Infrastructure.Repositories
             return await _dbContext.Set<TEntity>().FindAsync(id);
         }
 
+        public async Task<TEntity?> GetByIdNoTrackingAsync(Guid id)
+        {
+            return await _dbContext.Set<TEntity>().AsNoTracking().Where(e => e.Id == id).FirstOrDefaultAsync();
+        }
+
         /// <summary>
         /// Get  <see cref="TEntity"/>  entities by query
         /// </summary>
@@ -64,7 +69,7 @@ namespace ContainerManager.Infrastructure.Repositories
         /// <param name="entity">entity <see cref="TEntity"/> to be updated</param>
         public virtual async Task UpdateAsync(TEntity entity)
         {
-            _dbContext.Entry(entity).State = EntityState.Modified;
+            _dbContext.Set<TEntity>().Update(entity);
             await _dbContext.SaveChangesAsync();
         }
 

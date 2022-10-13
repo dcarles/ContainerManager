@@ -23,7 +23,6 @@ namespace ContainerManager.Infrastructure.Repositories
 		public async Task<IEnumerable<Domain.Models.Application>> GetByOwner(Guid userId)
 		{
 			return _mapper.Map<IEnumerable<Domain.Models.Application>>(await GetByQueryAsync(m => m.OwnerId == userId));
-
 		}
 
 		public async Task<Domain.Models.Application> GetByName(string name)
@@ -39,6 +38,18 @@ namespace ContainerManager.Infrastructure.Repositories
 				throw new RecordAlreadyExistsException($"Application with Name '{app.Name}' already exists");
 
 			await base.AddAsync(_mapper.Map<Application>(app));
+		}
+
+		public async Task UpdateAsync(Domain.Models.Application app)
+		{
+			var existing = await GetByIdNoTrackingAsync(app.Id);
+
+			if (existing == null || (existing != null && existing.OwnerId != app.OwnerId))
+				throw new RecordNotFoundException($"Application with Id '{app.Id}' does not exists or you do not own it");
+
+			existing.MachineId = app.MachineId;
+
+			await base.UpdateAsync(_mapper.Map<Application>(existing));
 		}
 
 		public async Task DeleteAsync(Guid id)

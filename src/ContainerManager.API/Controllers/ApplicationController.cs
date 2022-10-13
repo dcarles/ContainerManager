@@ -4,6 +4,7 @@ using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Models;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -34,7 +35,7 @@ namespace ContainerManager.API.Controllers
 
 		}
 
-		// GET api/application?ownerId=80927d68-ce2c-4c89-9805-de92d81b7517
+		// GET api/application
 		[HttpGet()]
 		[Authorize]
 		public async Task<IActionResult> Get()
@@ -48,7 +49,7 @@ namespace ContainerManager.API.Controllers
 				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "The user does not own any applications or user does not exists" });
 		}
 
-		// GET api/<UserController>/5
+		// GET api/application/5
 		[HttpGet("{id}")]
 		[Authorize]
 		public async Task<IActionResult> Get(Guid id)
@@ -61,10 +62,10 @@ namespace ContainerManager.API.Controllers
 				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "Application requested does not Exists" });
 		}
 
-		// POST api/<UserController>
+		// POST api/application
 		[HttpPost]
 		[Authorize]
-		public async Task<IActionResult> Post([FromBody] ApplicationRequest appRequest)
+		public async Task<IActionResult> Post([FromBody, CustomizeValidator(RuleSet = "Post")] ApplicationRequest appRequest)
 		{
 			var applicationCommand = _mapper.Map<CreateApplicationCommand>(appRequest);
 			applicationCommand.OwnerId = Guid.Parse(User.Identity.Name);
@@ -81,8 +82,30 @@ namespace ContainerManager.API.Controllers
 
 		}
 
+		// PATCH api/application/{applicationId}
+		[HttpPatch("{applicationId}")]
+		[Authorize]
+		public async Task<IActionResult> Patch([FromRoute] Guid applicationId,
+			[FromBody, CustomizeValidator(RuleSet = "Patch")] ApplicationRequest appRequest)
+		{
+			var applicationCommand = _mapper.Map<UpdateApplicationCommand>(appRequest);
+			applicationCommand.OwnerId = Guid.Parse(User.Identity.Name);
+			applicationCommand.Id = applicationId;
 
-		// DELETE api/<UserController>/5
+			try
+			{
+				var applicationResponse = await _mediator.Send(applicationCommand);			
+				return Ok(applicationResponse);
+			}
+			catch (RecordNotFoundException ex)
+			{
+				return new ConflictObjectResult(new ErrorResponse { StatusCode = 409, Message = ex.Message });
+			}
+
+		}
+
+
+		// DELETE api/application/5
 		[HttpDelete("{id}")]
 		[Authorize(Policy = Policies.OnlyApiOwners)]
 		public async Task<IActionResult> Delete(Guid id)

@@ -20,6 +20,7 @@ namespace ContainerManager.API.Auth
 		private const string ProblemDetailsContentType = "application/problem+json";
 		private readonly IUserRepository _repo;
 		private const string ApiKeyHeaderName = "X-Api-Key";
+
 		public ApiKeyAuthenticationHandler(
 			IOptionsMonitor<ApiKeyAuthenticationOptions> options,
 			ILoggerFactory logger,
@@ -81,7 +82,6 @@ namespace ContainerManager.API.Auth
 
 		protected override async Task HandleForbiddenAsync(AuthenticationProperties properties)
 		{
-
 			Response.StatusCode = (int)HttpStatusCode.Forbidden;
 			Response.ContentType = ProblemDetailsContentType;
 

@@ -1,5 +1,6 @@
 using ContainerManager.API.Auth;
 using ContainerManager.API.Helpers;
+using ContainerManager.API.Validation;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Handlers;
 using ContainerManager.Domain.Repositories;
@@ -7,15 +8,19 @@ using ContainerManager.Infrastructure;
 using ContainerManager.Infrastructure.Entities;
 using ContainerManager.Infrastructure.Repositories;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace ContainerManager.API
@@ -32,17 +37,10 @@ namespace ContainerManager.API
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services
-			.AddMvcCore()
-			.AddAuthorization();
-
-			services.AddHealthChecks();
+			services.AddMvc();
 
 			services.AddDbContext<ContainerManagerDbContext>(c =>
 			  c.UseSqlServer(Configuration.GetConnectionString("ContainersManagerDBConnectionString")));
-	
-
-			services.AddValidatorsFromAssemblyContaining<Startup>();
 
 			services.AddControllers().AddJsonOptions(options =>
 			{
@@ -50,6 +48,14 @@ namespace ContainerManager.API
 				options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(allowIntegerValues: false));
 				options.JsonSerializerOptions.Converters.Add(new JsonStringConverter());
 			});
+
+			services.AddFluentValidationAutoValidation(config =>
+			{
+				config.DisableDataAnnotationsValidation = true;
+				config.ImplicitlyValidateChildProperties = true;
+			});
+
+			services.AddValidatorsFromAssemblyContaining<ApplicationRequestValidator>();
 
 			services.AddSwaggerGen(c =>
 			{
@@ -74,12 +80,28 @@ namespace ContainerManager.API
 
 			services.AddAuthorization(options =>
 			{
-				options.AddPolicy(Policies.OnlyApiOwners, policy => policy.Requirements.Add(new OnlyApiOwnersRequirement()));				
+				options.AddPolicy(Policies.OnlyApiOwners, policy => policy.Requirements.Add(new OnlyApiOwnersRequirement()));
 			});
 
 			services.AddSingleton<IAuthorizationHandler, OnlyApiOwnersAuthorizationHandler>();
 
-			
+
+			//Automatic Handling of validation errors on Api request models
+			services.Configure((Action<ApiBehaviorOptions>)(options =>
+				options.InvalidModelStateResponseFactory = c =>
+				{
+					var errors = c.ModelState.Where(v => v.Value?.Errors.Count > 0)
+						.Select(v => new ErrorResponseItem { Field = v.Key, Errors = v.Value?.Errors.Select(e => e.ErrorMessage) })
+						.ToList();
+
+					return new BadRequestObjectResult(new ErrorResponse
+					{
+						StatusCode = 400,
+						Message = "One or more Validation errors Occurred",
+						Errors = errors
+					});
+				}));
+
 
 			services.AddHttpClient();
 		}

@@ -21,8 +21,7 @@ namespace ContainerManager.Domain.Commands
 		public string WorkingDirectory { get; set; }
 		public int CPULimit { get; set; }
 		public int MemoryMBLimit { get; set; }
-		public Guid OwnerId { get; set; }
-		public Guid? MachineId { get; set; }		
+		public Guid OwnerId { get; set; }	
 
 		public readonly Guid Id;
 

@@ -11,6 +11,7 @@ namespace ContainerManager.API.ViewModels
 			CreateMap<CreateUserCommand, User>();
 			CreateMap<CreateMachineCommand, Machine>();
 			CreateMap<CreateApplicationCommand, Application>();
+			CreateMap<UpdateApplicationCommand, Application>();
 		}
 	}
 }
