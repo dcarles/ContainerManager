@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "5b3f0403-cb74-49c8-8576-3bd51e7fc68c",
+		"name": "ContainerManager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17749970"
+	},
+	"item": [
+		{
+			"name": "Register new user",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@test.com\",\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Doe\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/user",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "testOwnerApiKey3264",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-Api-Key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/user/:userId",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						":userId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "74673219-988A-4558-9675-40814FCF1E87"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Machine Definition",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Machine1\",\r\n    \"os\": \"Linux\"  \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/machine",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"machine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Machine",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "testOwnerApiKey3264",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-Api-Key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/machine/:machineId",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"machine",
+						":machineId"
+					],
+					"query": [
+						{
+							"key": "machineId",
+							"value": null,
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "machineId",
+							"value": "74673219-988A-4558-9675-40814FCF1E87"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Application definition",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"app23\",\r\n    \"port\": 8080,\r\n    \"image\": \"app23\",\r\n    \"command\": \"bash\",\r\n    \"args\": \"dotnet app23.dll \",\r\n    \"workingDirectory\": \"app\",\r\n    \"cpuLimit\": 1000,\r\n    \"memoryMBLimit\": 8000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/application/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"application",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Application",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "testOwnerApiKey3264",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-Api-Key",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/application/:applicationId",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"application",
+						":applicationId"
+					],
+					"variable": [
+						{
+							"key": "applicationId",
+							"value": "74673219-988A-4558-9675-40814FCF1E87"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Assign Application to a Machine",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"machineId\":\"1207137B-AC58-468C-AAF7-0EC05E6DF375\"  \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/application/74673219-988A-4558-9675-40814FCF1E87",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"application",
+						"74673219-988A-4558-9675-40814FCF1E87"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get  my applications",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/application/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"application",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get my machines",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/machine",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"machine"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "X-Api-Key",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "testConsumerApiKey3264",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:55100/api",
+			"type": "string"
+		}
+	]
+}
