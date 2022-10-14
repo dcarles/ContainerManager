@@ -254,14 +254,16 @@ The test project has different classes that consists unit tests for each compone
 There are 2 containers which are api and ms-sql. In User Testing section, I give details about how these containers should be started. There are 2 compose files one is for only ms-sql and the other is for the api. There are also 2 Docker files in api project and in the docker-setup\ms-sql folder.
 
 ##  What I would have done with more time
+I spent approx 32h in this project. As it was fairly complex/long to do all the requirements in a good way, there are many things that could have been done. Few of those are:
+
  * More tests, there are sufficient tests but not all cases/code is covered, and also there are no integration tests.
  * Better error handling and logging, at the moment there is not very much of this.
- * Better validations at the moment is very basic.
+ * Better validations at the moment is very basic validations just to avoid db errors and show how validations would work.
  * Better way to retrieve applications/machines of a user as it wont be very efficient to return them all if many, so some sort of query/pagination is needed
  * Better authentication at the moment is very naive and simple just by creating api keys on user registration and check those when executing a request.
- * Better implementation of Entity framework, at the moment it was done in a very quick and simple way in a repo class, but in a real app it would need to be better implemented
- * Simplify the models a bit, at the moment may be overengineered for CQRS and have too many probably.
+ * Better implementation of Entity framework, at the moment it was done in a very quick and simple way in a repo class, but in a real app it would need to be better implemented. Or maybe even spend more time to analyse if this would be better suited for a NoSQL db, among other things.
+ * Simplify the models a bit, at the moment may be overengineered for CQRS and clean architecture and have too many probably.
  * Better management of the roles, at the moment is very basic authorization so delete endpoints can only be executed by Api Owners, and the others by any authenticated user. But in a real application you probably want for the same endpoint to do different things depending on the role.
- * Would like to have implemented the K8S deployment properly but I did not understand very well how to implement the requirement for the app to be able to deploy via K8s and start/stop each of the apps registered.
+ * Would like to have implemented the K8S deployment properly as per the challenge description, but I did not understand very well how to implement the requirement for the app to be able to deploy via K8s and start/stop each of the apps registered.
 
 
