@@ -29,47 +29,55 @@ namespace ContainerManager.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Args")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CPULimit")
                         .HasColumnType("int");
 
                     b.Property<string>("Command")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("MachineId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MachineId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("MemoryMBLimit")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("OwnerId")
+                    b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Port")
                         .HasColumnType("int");
 
                     b.Property<string>("State")
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WorkingDirectory")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MachineId");
 
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
+                    b.HasIndex("MachineId1");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Applications");
                 });
@@ -81,21 +89,20 @@ namespace ContainerManager.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("OS")
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OwnerId")
+                    b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
-
-                    b.HasIndex("OwnerId");
+                        .IsUnique();
 
                     b.ToTable("Machines");
                 });
@@ -107,29 +114,32 @@ namespace ContainerManager.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ApiKey")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApiKey")
-                        .IsUnique()
-                        .HasFilter("[ApiKey] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Users");
 
@@ -157,25 +167,15 @@ namespace ContainerManager.Infrastructure.Migrations
             modelBuilder.Entity("ContainerManager.Infrastructure.Entities.Application", b =>
                 {
                     b.HasOne("ContainerManager.Infrastructure.Entities.Machine", "Machine")
-                        .WithMany("Applications")
-                        .HasForeignKey("MachineId");
-
-                    b.HasOne("ContainerManager.Infrastructure.Entities.User", "Owner")
                         .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("MachineId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("ContainerManager.Infrastructure.Entities.Machine", null)
+                        .WithMany("Applications")
+                        .HasForeignKey("MachineId1");
 
                     b.Navigation("Machine");
-
-                    b.Navigation("Owner");
-                });
-
-            modelBuilder.Entity("ContainerManager.Infrastructure.Entities.Machine", b =>
-                {
-                    b.HasOne("ContainerManager.Infrastructure.Entities.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("ContainerManager.Infrastructure.Entities.Machine", b =>

@@ -108,7 +108,7 @@ namespace ContainerManager.API.Controllers
 		[ProducesResponseType(typeof(ErrorResponse), 500)]
 		public async Task<IActionResult> Delete(Guid id)
 		{
-			var deleteCommand = new DeleteCommand<Machine>(id);
+			var deleteCommand = new DeleteCommand<Machine>(id, Guid.Parse(User.Identity.Name));
 			await _mediator.Send(deleteCommand);
 			return Ok();
 		}

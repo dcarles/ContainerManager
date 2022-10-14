@@ -5,20 +5,34 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ContainerManager.Infrastructure.Migrations
 {
-    public partial class ContainersManagerDB : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Machines",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OS = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Machines", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApiKey = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Role = table.Column<string>(type: "nvarchar(50)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApiKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,40 +40,22 @@ namespace ContainerManager.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Machines",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    OS = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Machines", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Machines_Users_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Applications",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Port = table.Column<int>(type: "int", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Command = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Args = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WorkingDirectory = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    State = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Command = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Args = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WorkingDirectory = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CPULimit = table.Column<int>(type: "int", nullable: false),
                     MemoryMBLimit = table.Column<int>(type: "int", nullable: false),
-                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    MachineId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MachineId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MachineId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,11 +64,12 @@ namespace ContainerManager.Infrastructure.Migrations
                         name: "FK_Applications_Machines_MachineId",
                         column: x => x.MachineId,
                         principalTable: "Machines",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Applications_Users_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Users",
+                        name: "FK_Applications_Machines_MachineId1",
+                        column: x => x.MachineId1,
+                        principalTable: "Machines",
                         principalColumn: "Id");
                 });
 
@@ -84,7 +81,7 @@ namespace ContainerManager.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "ApiKey", "Email", "FirstName", "LastName", "Role" },
-                values: new object[] { new Guid("a6de3afd-5c74-407b-8a19-75c37027e610"), "testOwnerApiKey3264", "danielcarles@gmail.com", "Daniel", "Carles","ApiOwner" });
+                values: new object[] { new Guid("a6de3afd-5c74-407b-8a19-75c37027e610"), "testOwnerApiKey3264", "danielcarles@gmail.com", "Daniel", "Carles", "ApiOwner" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Applications_MachineId",
@@ -92,42 +89,33 @@ namespace ContainerManager.Infrastructure.Migrations
                 column: "MachineId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Applications_MachineId1",
+                table: "Applications",
+                column: "MachineId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Applications_Name",
                 table: "Applications",
                 column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Applications_OwnerId",
-                table: "Applications",
-                column: "OwnerId");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Machines_Name",
                 table: "Machines",
                 column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Machines_OwnerId",
-                table: "Machines",
-                column: "OwnerId");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_ApiKey",
                 table: "Users",
                 column: "ApiKey",
-                unique: true,
-                filter: "[ApiKey] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
-                unique: true,
-                filter: "[Email] IS NOT NULL");
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -136,10 +124,10 @@ namespace ContainerManager.Infrastructure.Migrations
                 name: "Applications");
 
             migrationBuilder.DropTable(
-                name: "Machines");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Machines");
         }
     }
 }

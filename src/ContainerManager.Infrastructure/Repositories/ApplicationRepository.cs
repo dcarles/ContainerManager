@@ -40,14 +40,26 @@ namespace ContainerManager.Infrastructure.Repositories
 			await base.AddAsync(_mapper.Map<Application>(app));
 		}
 
+		public async Task UpdateOwnership(Guid currentOwnerId, Guid newOwnerId)
+		{
+			//Change ownership of user machines to newOwnerId
+			var userApps = _mapper.Map<IEnumerable<Domain.Models.Application>>(await GetByQueryAsync(m => m.OwnerId == currentOwnerId,
+																									avoidTracking: true));
+			foreach (var app in userApps)
+			{
+				app.OwnerId = newOwnerId;
+				await UpdateAsync(app);
+			}
+		}
+
 		public async Task UpdateAsync(Domain.Models.Application app)
 		{
 			var existing = await GetByIdNoTrackingAsync(app.Id);
 
-			if (existing == null || (existing != null && existing.OwnerId != app.OwnerId))
-				throw new RecordNotFoundException($"Application with Id '{app.Id}' does not exists or you do not own it");
+			if (existing == null )
+				throw new RecordNotFoundException($"Application with Id '{app.Id}' does not exists");
 
-			existing.MachineId = app.MachineId;
+			existing.MachineId = app.Machine.Id;			
 
 			await base.UpdateAsync(_mapper.Map<Application>(existing));
 		}

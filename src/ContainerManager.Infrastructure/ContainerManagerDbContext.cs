@@ -30,6 +30,11 @@ namespace ContainerManager.Infrastructure
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			modelBuilder.Entity<Application>()
+		   .HasOne(s => s.Machine)
+		   .WithMany()
+		   .HasForeignKey(a=>a.MachineId).OnDelete(DeleteBehavior.SetNull);		
+
 			// Ensure that API Keys are Unique
 			modelBuilder.Entity<User>()
 				.HasIndex(u => u.ApiKey)

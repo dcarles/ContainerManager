@@ -14,7 +14,8 @@ namespace ContainerManager.Infrastructure.Entities
 		public int CPULimit { get; set; }
 		public int MemoryMBLimit { get; set; }
 		public Guid OwnerId { get; set; }
-		public Guid? MachineId { get; set; }	
-
+		public Guid? MachineId { get; set; }
+		
+		public virtual Machine? Machine { get; set; } = null;
 	}
 }

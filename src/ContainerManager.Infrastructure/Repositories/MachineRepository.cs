@@ -40,6 +40,32 @@ namespace ContainerManager.Infrastructure.Repositories
 			await base.AddAsync(_mapper.Map<Machine>(machine));
 		}
 
+		public async Task UpdateOwnership(Guid currentOwnerId, Guid newOwnerId)
+		{
+			_dbContext.ChangeTracker.LazyLoadingEnabled = false;
+			//Change ownership of user machines to newOwnerId
+			var userMachines = _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.OwnerId == currentOwnerId, 
+																									avoidTracking:true));
+			foreach (var machine in userMachines)
+			{
+				machine.OwnerId = newOwnerId;
+				await UpdateAsync(machine);
+			}
+			_dbContext.ChangeTracker.LazyLoadingEnabled = true;
+		}
+
+		public async Task UpdateAsync(Domain.Models.Machine machine)
+		{
+			var existing = await GetByIdNoTrackingAsync(machine.Id);
+
+			if (existing == null)
+				throw new RecordNotFoundException($"Machine with Id '{machine.Id}' does not exists or you do not own it");
+
+			existing.OwnerId = machine.OwnerId;
+
+			await base.UpdateAsync(_mapper.Map<Machine>(existing));
+		}
+
 		public async Task DeleteAsync(Guid id)
 		{
 			await base.DeleteAsync(new Machine { Id = id });

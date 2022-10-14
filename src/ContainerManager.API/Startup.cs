@@ -1,5 +1,6 @@
 using ContainerManager.API.Auth;
 using ContainerManager.API.Helpers;
+using ContainerManager.API.Middlewares;
 using ContainerManager.API.Validation;
 using ContainerManager.API.ViewModels;
 using ContainerManager.Domain.Handlers;
@@ -161,6 +162,8 @@ namespace ContainerManager.API
 
 			app.UseAuthentication();
 			app.UseAuthorization();
+
+			app.UseMiddleware<ExceptionMiddleware>();
 
 			app.Map("/healthcheck", s =>
 			{

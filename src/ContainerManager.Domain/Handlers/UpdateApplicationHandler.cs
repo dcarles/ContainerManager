@@ -30,6 +30,7 @@ namespace ContainerManager.Domain.Handlers
 				throw new RecordNotFoundException($"Machine with Id '{request.MachineId}' does not exists");
 
 			var application = _mapper.Map<Application>(request);
+			application.Machine = machine;
 			await _repo.UpdateAsync(application);
 			return application;
 		}

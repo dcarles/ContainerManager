@@ -12,5 +12,6 @@ namespace ContainerManager.Domain.Repositories
 		Task<IEnumerable<Application>> GetByOwner(Guid userId);
 		Task DeleteAsync(Guid id);
 		Task UpdateAsync(Application app);
+		Task UpdateOwnership(Guid currentOwnerId, Guid newOwnerId);
 	}
 }

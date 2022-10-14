@@ -219,7 +219,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \"machineId\":\"1207137B-AC58-468C-AAF7-0EC05E6DF375\"  \r\n}",
+					"raw": "{\r\n   \"machineId\":\"FC469408-AD5D-40AD-83AF-EA87CE75B6A0\"  \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -227,13 +227,19 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/application/74673219-988A-4558-9675-40814FCF1E87",
+					"raw": "{{base_url}}/application/:applicationId",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"application",
-						"74673219-988A-4558-9675-40814FCF1E87"
+						":applicationId"
+					],
+					"variable": [
+						{
+							"key": "applicationId",
+							"value": "810ea8f7-43be-4306-8a5f-51c9bb5745fa"
+						}
 					]
 				}
 			},

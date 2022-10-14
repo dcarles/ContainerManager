@@ -38,9 +38,13 @@ namespace ContainerManager.Infrastructure.Repositories
         /// </summary>
         /// <param name="query">Predicate to be used for query</param>
         /// <returns>List of entities</returns>
-        public async Task<IEnumerable<TEntity>> GetByQueryAsync(Expression<Func<TEntity, bool>> query)
+        public async Task<IEnumerable<TEntity>> GetByQueryAsync(Expression<Func<TEntity, bool>> query, bool avoidTracking = false)
         {
-            return await GetEntitiesByQuery(query).ToListAsync();
+            var entities = GetEntitiesByQuery(query);
+            
+            if(avoidTracking) entities = entities.AsNoTracking();
+
+            return await entities.ToListAsync();
         }
 
         /// <summary>

@@ -112,7 +112,7 @@ namespace ContainerManager.API.Controllers
 		public async Task<IActionResult> Patch([FromRoute] Guid applicationId,
 			[FromBody, CustomizeValidator(RuleSet = "Patch")] ApplicationRequest appRequest)
 		{
-			var applicationCommand = _mapper.Map<UpdateApplicationCommand>(appRequest);
+			var applicationCommand = _mapper.Map<UpdateApplicationCommand>(appRequest);		
 			applicationCommand.OwnerId = Guid.Parse(User.Identity.Name);
 			applicationCommand.Id = applicationId;
 
@@ -142,7 +142,7 @@ namespace ContainerManager.API.Controllers
 		[ProducesResponseType(typeof(ErrorResponse), 500)]		
 		public async Task<IActionResult> Delete(Guid id)
 		{
-			var deleteCommand = new DeleteCommand<Application>(id);
+			var deleteCommand = new DeleteCommand<Application>(id, Guid.Parse(User.Identity.Name));
 			await _mediator.Send(deleteCommand);
 			return Ok();
 		}
