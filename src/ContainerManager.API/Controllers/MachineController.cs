@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace ContainerManager.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[ApiExplorerSettings(GroupName = "Machine")]
 	public class MachineController : ControllerBase
 	{
 		private readonly ILogger<MachineController> _logger;
@@ -33,9 +35,19 @@ namespace ContainerManager.API.Controllers
 		}
 
 
-		// GET api/machine?ownerId=80927d68-ce2c-4c89-9805-de92d81b7517
+		/// <summary>
+		/// Get machines owned by caller
+		/// </summary>
+		/// <remarks>
+		/// ## Description
+		/// This endpoint will return all machines owned by the caller 		
+		/// </remarks>
+		/// <returns>A list of machines owned by the caller</returns>
 		[HttpGet()]
 		[Authorize]
+		[ProducesResponseType(typeof(IEnumerable<Machine>), 200)]
+		[ProducesResponseType(typeof(ErrorResponse), 404)]
+		[ProducesResponseType(typeof(ErrorResponse), 500)]
 		public async Task<IActionResult> Get()
 		{
 			var ownerId = Guid.Parse(User.Identity.Name);
@@ -47,22 +59,21 @@ namespace ContainerManager.API.Controllers
 				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "The user does not own any machines or user does not exists" });
 		}
 
-		// GET api/machine/5
-		[HttpGet("{id}")]
-		[Authorize]
-		public async Task<IActionResult> Get(Guid id)
-		{
-			var machineByIdQuery = new GetByIdQuery<Machine>(id);
-			var machineResponse = await _mediator.Send(machineByIdQuery);
-			if (machineResponse != null)
-				return Ok(machineResponse);
-			else
-				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "Machine requested does not Exists" });
-		}
-
-		// POST api/machine
+		/// <summary>
+		/// Create a new machine definition
+		/// </summary>
+		/// <remarks>
+		/// ## Description
+		/// This endpoint will create a new machine definition. 
+		/// The machine will be owned by the caller
+		/// </remarks>
+		/// <param name="machineRequest">The machine definion to create</param>
+		/// <returns>Machine created details</returns>
 		[HttpPost]
 		[Authorize]
+		[ProducesResponseType(typeof(Machine), 200)]
+		[ProducesResponseType(typeof(ErrorResponse), 409)]
+		[ProducesResponseType(typeof(ErrorResponse), 500)]
 		public async Task<IActionResult> Post([FromBody] MachineRequest machineRequest)
 		{
 			var machineCommand = _mapper.Map<CreateMachineCommand>(machineRequest);
@@ -81,9 +92,20 @@ namespace ContainerManager.API.Controllers
 		}
 
 
-		// DELETE api/machine/5
+		/// <summary>
+		/// Delete an existing Machine
+		/// </summary>
+		/// <remarks>
+		/// ## Description
+		/// This endpoint will delete the Machine. Restricted to ApiOwners.
+		/// Any application related to this machine will be updated to not be related to any machine.
+		/// </remarks>
+		/// <param name="id">Id of the machine to delete</param>	
 		[HttpDelete("{id}")]
 		[Authorize(Policy = Policies.OnlyApiOwners)]
+		[ApiExplorerSettings(GroupName = "Api Owner Only")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(typeof(ErrorResponse), 500)]
 		public async Task<IActionResult> Delete(Guid id)
 		{
 			var deleteCommand = new DeleteCommand<Machine>(id);

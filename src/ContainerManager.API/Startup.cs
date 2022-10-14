@@ -9,9 +9,11 @@ using ContainerManager.Infrastructure.Entities;
 using ContainerManager.Infrastructure.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using HealthChecks.UI.Client;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +22,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace ContainerManager.API
@@ -59,7 +64,37 @@ namespace ContainerManager.API
 
 			services.AddSwaggerGen(c =>
 			{
-				c.SwaggerDoc("v1", new OpenApiInfo { Title = "ContainerManager.API", Version = "v1" });
+				c.SwaggerDoc("v1", new OpenApiInfo { Title = $"ContainerManager.API {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}", Version = "v1" });
+
+				c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme()
+				{
+					Type = SecuritySchemeType.ApiKey,
+					In = ParameterLocation.Header,
+					Name = "X-Api-Key",
+					Description = "Basic Authorization using unique ApiKey per user",
+				});
+
+				c.AddSecurityRequirement(new OpenApiSecurityRequirement
+				{
+					{
+						new OpenApiSecurityScheme
+						{
+							Reference = new OpenApiReference {
+								Type = ReferenceType.SecurityScheme,
+								Id = "ApiKey"
+							}
+						},
+						Array.Empty<string>()
+					}
+				});				
+
+				c.DocInclusionPredicate((name, api) => true);
+				c.UseInlineDefinitionsForEnums();
+				c.TagActionsBy(api => new List<string> { api.GroupName });
+				var xmlFile = $"ContainerManager.API.xml";
+				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+				c.IncludeXmlComments(xmlPath, true);
+			
 			});
 
 			services.AddHealthChecks();
@@ -113,13 +148,29 @@ namespace ContainerManager.API
 			{
 				app.UseDeveloperExceptionPage();
 				app.UseSwagger();
-				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ContainerManager.API v1"));
+
+				app.UseSwaggerUI(c =>
+				{
+					c.DisplayRequestDuration();
+					c.SwaggerEndpoint("/swagger/v1/swagger.json", "ContainerManager.API v1");
+				});
+
 			}
 
 			app.UseRouting();
 
 			app.UseAuthentication();
 			app.UseAuthorization();
+
+			app.Map("/healthcheck", s =>
+			{
+				s.UseRouting();
+				s.UseEndpoints(endpoints => endpoints.MapHealthChecks("/", new HealthCheckOptions()
+				{
+					Predicate = _ => true,
+					ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+				}));
+			});
 
 			app.UseEndpoints(endpoints =>
 			{

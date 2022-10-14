@@ -54,7 +54,7 @@ namespace ContainerManager.API.Auth
 				new Claim(ClaimTypes.Name, existingApiKey.Id.ToString())
 			};
 
-				claims.Add(new Claim(ClaimTypes.Role, "ApiOwner"));
+				claims.Add(new Claim(ClaimTypes.Role, existingApiKey.Role.ToString()));
 
 				var identity = new ClaimsIdentity(claims, Options.AuthenticationType);
 				var identities = new List<ClaimsIdentity> { identity };

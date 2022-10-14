@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +21,7 @@ namespace ContainerManager.API.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[ApiExplorerSettings(GroupName = "Application")]
 	public class ApplicationController : ControllerBase
 	{
 
@@ -35,9 +37,19 @@ namespace ContainerManager.API.Controllers
 
 		}
 
-		// GET api/application
+		/// <summary>
+		/// Get applications owned by caller
+		/// </summary>
+		/// <remarks>
+		/// ## Description
+		/// This endpoint will return all applications owned by the caller 		
+		/// </remarks>
+		/// <returns>A list of applications owned by the caller</returns>
 		[HttpGet()]
 		[Authorize]
+		[ProducesResponseType(typeof(IEnumerable<Application>), 200)]
+		[ProducesResponseType(typeof(ErrorResponse), 404)]
+		[ProducesResponseType(typeof(ErrorResponse), 500)]
 		public async Task<IActionResult> Get()
 		{
 			var ownerId = Guid.Parse(User.Identity.Name);
@@ -49,22 +61,22 @@ namespace ContainerManager.API.Controllers
 				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "The user does not own any applications or user does not exists" });
 		}
 
-		// GET api/application/5
-		[HttpGet("{id}")]
-		[Authorize]
-		public async Task<IActionResult> Get(Guid id)
-		{
-			var applicationByIdQuery = new GetByIdQuery<Application>(id);
-			var applicationResponse = await _mediator.Send(applicationByIdQuery);
-			if (applicationResponse != null)
-				return Ok(applicationResponse);
-			else
-				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = "Application requested does not Exists" });
-		}
-
-		// POST api/application
+		/// <summary>
+		/// Create a new application definition
+		/// </summary>
+		/// <remarks>
+		/// ## Description
+		/// This endpoint will create a new application definition. 
+		/// The application will be owned by the caller and will not be associated to any machine. 
+		/// Initial application state will be "created"
+		/// </remarks>
+		/// <param name="applicationRequest">The application definion to create</param>
+		/// <returns>Application created details</returns>
 		[HttpPost]
 		[Authorize]
+		[ProducesResponseType(typeof(Application), 200)]
+		[ProducesResponseType(typeof(ErrorResponse), 409)]
+		[ProducesResponseType(typeof(ErrorResponse), 500)]
 		public async Task<IActionResult> Post([FromBody, CustomizeValidator(RuleSet = "Post")] ApplicationRequest appRequest)
 		{
 			var applicationCommand = _mapper.Map<CreateApplicationCommand>(appRequest);
@@ -82,9 +94,21 @@ namespace ContainerManager.API.Controllers
 
 		}
 
-		// PATCH api/application/{applicationId}
+		/// <summary>
+		/// Assign Application to a Machine
+		/// </summary>
+		/// <remarks>
+		/// ## Description
+		/// This endpoint will assign an application to a machine.	
+		/// </remarks>
+		/// <param name="applicationId">The id of the application to update</param>
+		/// <param name="appRequest">The details of the fields to change (MachineId)</param>
+		/// <returns>The updated application details</returns>
 		[HttpPatch("{applicationId}")]
 		[Authorize]
+		[ProducesResponseType(typeof(Application), 200)]
+		[ProducesResponseType(typeof(ErrorResponse), 404)]
+		[ProducesResponseType(typeof(ErrorResponse), 500)]
 		public async Task<IActionResult> Patch([FromRoute] Guid applicationId,
 			[FromBody, CustomizeValidator(RuleSet = "Patch")] ApplicationRequest appRequest)
 		{
@@ -99,15 +123,23 @@ namespace ContainerManager.API.Controllers
 			}
 			catch (RecordNotFoundException ex)
 			{
-				return new ConflictObjectResult(new ErrorResponse { StatusCode = 409, Message = ex.Message });
+				return new NotFoundObjectResult(new ErrorResponse { StatusCode = 404, Message = ex.Message });
 			}
-
 		}
 
-
-		// DELETE api/application/5
+		/// <summary>
+		/// Delete an existing Application
+		/// </summary>
+		/// <remarks>
+		/// ## Description
+		/// This endpoint will delete the Application. Restricted to ApiOwners.	
+		/// </remarks>
+		/// <param name="id">Id of the application to delete</param>	
 		[HttpDelete("{id}")]
 		[Authorize(Policy = Policies.OnlyApiOwners)]
+		[ApiExplorerSettings(GroupName = "Api Owner Only")]
+		[ProducesResponseType(200)]
+		[ProducesResponseType(typeof(ErrorResponse), 500)]		
 		public async Task<IActionResult> Delete(Guid id)
 		{
 			var deleteCommand = new DeleteCommand<Application>(id);
