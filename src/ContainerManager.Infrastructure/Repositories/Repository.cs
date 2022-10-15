@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace ContainerManager.Infrastructure.Repositories
 {
-	public class Repository<TEntity> where TEntity : BaseEntity
+	public abstract class Repository<TEntity> where TEntity : BaseEntity
 	{
         protected readonly ContainerManagerDbContext _dbContext;
 
-        public Repository(ContainerManagerDbContext dbContext)
+        protected Repository(ContainerManagerDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -23,12 +23,12 @@ namespace ContainerManager.Infrastructure.Repositories
         /// </summary>
         /// <param name="id">Unique identifier of the entity</param>
         /// <returns><see cref="TEntity"/> entity, if the record does not exist, it returns null</returns>
-        public async Task<TEntity?> GetByIdAsync(Guid id)
+        protected async Task<TEntity?> GetByIdAsync(Guid id)
         {
             return await _dbContext.Set<TEntity>().FindAsync(id);
         }
 
-        public async Task<TEntity?> GetByIdNoTrackingAsync(Guid id)
+        protected async Task<TEntity?> GetByIdNoTrackingAsync(Guid id)
         {
             return await _dbContext.Set<TEntity>().AsNoTracking().Where(e => e.Id == id).FirstOrDefaultAsync();
         }
@@ -38,7 +38,7 @@ namespace ContainerManager.Infrastructure.Repositories
         /// </summary>
         /// <param name="query">Predicate to be used for query</param>
         /// <returns>List of entities</returns>
-        public async Task<IEnumerable<TEntity>> GetByQueryAsync(Expression<Func<TEntity, bool>> query, bool avoidTracking = false)
+        protected async Task<IEnumerable<TEntity>> GetByQueryAsync(Expression<Func<TEntity, bool>> query, bool avoidTracking = false)
         {
             var entities = GetEntitiesByQuery(query);
             
@@ -52,7 +52,7 @@ namespace ContainerManager.Infrastructure.Repositories
         /// </summary>
         /// <param name="query">Predicate to be used for query</param>
         /// <returns>The <see cref="TEntity"/>  entity</returns>
-        public virtual Task<TEntity?> GetSingleByQueryAsync(Expression<Func<TEntity, bool>> query = null)
+        protected virtual Task<TEntity?> GetSingleByQueryAsync(Expression<Func<TEntity, bool>> query = null)
         {
             return GetEntitiesByQuery(query).SingleOrDefaultAsync();
         }
@@ -61,7 +61,7 @@ namespace ContainerManager.Infrastructure.Repositories
         /// Creates a <see cref="TEntity"/> entity 
         /// </summary>
         /// <param name="entity">entity <see cref="TEntity"/> to be created</param>
-        public virtual async Task AddAsync(TEntity entity)
+        protected virtual async Task AddAsync(TEntity entity)
         {   
             await _dbContext.Set<TEntity>().AddAsync(entity);
             await _dbContext.SaveChangesAsync();
@@ -71,7 +71,7 @@ namespace ContainerManager.Infrastructure.Repositories
         ///  Updates a <see cref="TEntity"/> entity 
         /// </summary>
         /// <param name="entity">entity <see cref="TEntity"/> to be updated</param>
-        public virtual async Task UpdateAsync(TEntity entity)
+        protected virtual async Task UpdateAsync(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);
             await _dbContext.SaveChangesAsync();
@@ -82,7 +82,7 @@ namespace ContainerManager.Infrastructure.Repositories
             return _dbContext.Set<TEntity>().Where(query);
         }
 
-        public virtual async Task DeleteAsync(TEntity entity)
+        protected virtual async Task DeleteAsync(TEntity entity)
         {
 			_dbContext.Remove(entity);
             await _dbContext.SaveChangesAsync();
