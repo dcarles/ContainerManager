@@ -19,16 +19,24 @@ using System.Threading.Tasks;
 
 namespace ContainerManager.API.Controllers
 {
+	/// <summary>
+	/// Controler for Application CRUD operations
+	/// </summary>
 	[Route("api/[controller]")]
 	[ApiController]
 	[ApiExplorerSettings(GroupName = "Application")]
 	public class ApplicationController : ControllerBase
 	{
-
 		private readonly ILogger<ApplicationController> _logger;
 		private readonly IMediator _mediator;
 		private readonly IMapper _mapper;
 
+		/// <summary>
+		/// Application Controler constructor
+		/// </summary>
+		/// <param name="logger">Logger to log errors and info</param>
+		/// <param name="mediator">Mediator to send query/commands</param>
+		/// <param name="mapper">Mapper to map request to command/query</param>
 		public ApplicationController(ILogger<ApplicationController> logger, IMediator mediator, IMapper mapper)
 		{
 			_logger = logger;

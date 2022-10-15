@@ -1,0 +1,40 @@
+﻿using AutoFixture;
+using AutoMapper;
+using ContainerManager.Domain.Commands;
+using ContainerManager.Domain.Handlers;
+using ContainerManager.Domain.Models;
+using ContainerManager.Domain.Repositories;
+using Moq;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace ContainerManager.UnitTests.Handlers
+{
+	public class DeleteApplicationHandlerTests
+	{
+		private readonly IFixture _fixture;
+		private readonly Mock<IApplicationRepository> _repoMock;		
+
+		public DeleteApplicationHandlerTests()
+		{			
+			_fixture = new Fixture();			
+			_repoMock = new Mock<IApplicationRepository>();
+		}
+
+		[Fact]
+		public async Task HandleAsync_DeleteAsyncCalled_ReturnsSuccesfully()
+		{
+			// Arrange	
+			var command = _fixture.Create<DeleteCommand<Application>>();
+			var handler = new DeleteApplicationHandler(_repoMock.Object);
+
+			//Act
+			await handler.Handle(command, new CancellationToken());
+
+			//Assert
+			_repoMock.Verify(r => r.DeleteAsync(command.Id), Times.Once);
+
+		}
+	}
+}

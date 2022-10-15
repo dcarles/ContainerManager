@@ -41,8 +41,7 @@ namespace ContainerManager.Infrastructure.Repositories
 		}
 
 		public async Task UpdateOwnership(Guid currentOwnerId, Guid newOwnerId)
-		{
-			_dbContext.ChangeTracker.LazyLoadingEnabled = false;
+		{			
 			//Change ownership of user machines to newOwnerId
 			var userMachines = _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.OwnerId == currentOwnerId, 
 																									avoidTracking:true));
@@ -50,8 +49,7 @@ namespace ContainerManager.Infrastructure.Repositories
 			{
 				machine.OwnerId = newOwnerId;
 				await UpdateAsync(machine);
-			}
-			_dbContext.ChangeTracker.LazyLoadingEnabled = true;
+			}			
 		}
 
 		public async Task UpdateAsync(Domain.Models.Machine machine)

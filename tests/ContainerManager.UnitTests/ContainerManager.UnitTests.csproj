@@ -24,4 +24,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\ContainerManager.API\ContainerManager.API.csproj" />
+  </ItemGroup>
+
 </Project>
