@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: containers-manager-deployment
+spec:
+  selector:
+    matchLabels:
+      app: containers-manager
+  template:
+    metadata:
+      labels:
+        app: containers-manager
+    spec:
+      containers:
+      - name: containers-manager-api
+        image: dcarlesdocker/containers-manager-api:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 8080
+        env:
+          - name: DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
+            value: "1"
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: ASPNETCORE_URLS
+            value: http://*:8080
+          - name: ConnectionStrings__ContainersManagerDBConnectionString
+            value: Server=127.0.0.1,1433;database=ContainersManagerDB;uid=sa;pwd=Password123
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: containers-manager-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: containers-manager
+  ports:
+  - port: 8080
+    targetPort: 8080

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ms-sql-statefulset
+spec:
+  replicas: 1
+  serviceName: "ms-sql-service"
+  selector:
+    matchLabels:
+      app: ms-sql  
+  template:
+    metadata:
+      labels:
+        app: ms-sql
+    spec:
+      containers:
+      - name: ms-sql
+        image: dcarlesdocker/ms-sql:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 1433
+        env:
+          - name: SA_PASSWORD
+            value: "Password123"
+          - name: ACCEPT_EULA
+            value: "Y"   
+        volumeMounts:
+        - name: data
+          mountPath: "/var/opt/mssql/data"
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      resources:
+        requests:
+          storage: 1Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-sql-service
+spec:
+  clusterIP: None
+  selector:
+    app: ms-sql
+  ports:
+  - port: 1433
+    targetPort: 1433
