@@ -27,8 +27,8 @@ spec:
             value: Development
           - name: ASPNETCORE_URLS
             value: http://*:8080
-          - name: ConnectionStrings__ContainersManagerDBConnectionString
-            value: Server=127.0.0.1,1433;database=ContainersManagerDB;uid=sa;pwd=Password123
+          - name: CONFIG_ConnectionStrings__ContainersManagerDBConnectionString
+            value: Server=ms-sql-service,1433;database=ContainersManagerDB;uid=sa;pwd=Password123
         livenessProbe:
           httpGet:
             path: /health/live
