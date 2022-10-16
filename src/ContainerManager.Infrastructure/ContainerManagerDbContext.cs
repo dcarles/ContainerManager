@@ -1,11 +1,6 @@
 ﻿
 using ContainerManager.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContainerManager.Infrastructure
 {
@@ -33,7 +28,7 @@ namespace ContainerManager.Infrastructure
 			modelBuilder.Entity<Application>()
 		   .HasOne(s => s.Machine)
 		   .WithMany()
-		   .HasForeignKey(a=>a.MachineId).OnDelete(DeleteBehavior.SetNull);		
+		   .HasForeignKey(a => a.MachineId).OnDelete(DeleteBehavior.SetNull);
 
 			// Ensure that API Keys are Unique
 			modelBuilder.Entity<User>()

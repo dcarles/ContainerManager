@@ -23,7 +23,7 @@ namespace ContainerManager.UnitTests.Handlers
 		private readonly Application _application;
 
 		public UpdateApplicationHandlerTests()
-		{			
+		{
 			_fixture = new Fixture();
 			_application = _fixture.Create<Application>();
 			_mapperMock = new Mock<IMapper>();
@@ -39,7 +39,7 @@ namespace ContainerManager.UnitTests.Handlers
 			// Arrange	
 			var command = _fixture.Create<UpdateApplicationCommand>();
 			var machine = _fixture.Create<Machine>();
-			_machineRepoMock.Setup(m=> m.GetByIdAsync(command.MachineId)).ReturnsAsync(machine);
+			_machineRepoMock.Setup(m => m.GetByIdAsync(command.MachineId)).ReturnsAsync(machine);
 
 			var handler = new UpdateApplicationHandler(_repoMock.Object, _machineRepoMock.Object, _mapperMock.Object);
 
@@ -55,7 +55,7 @@ namespace ContainerManager.UnitTests.Handlers
 		public async Task HandleAsync_InvalidMachine_UpdateAsyncNotCalled_ThrowsRecordNotFoundException()
 		{
 			// Arrange	
-			var command = _fixture.Create<UpdateApplicationCommand>();		
+			var command = _fixture.Create<UpdateApplicationCommand>();
 			_machineRepoMock.Setup(m => m.GetByIdAsync(command.MachineId)).ReturnsAsync((Machine)null);
 
 			var handler = new UpdateApplicationHandler(_repoMock.Object, _machineRepoMock.Object, _mapperMock.Object);

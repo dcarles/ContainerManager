@@ -2,9 +2,6 @@
 using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Repositories;
 using ContainerManager.Infrastructure.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ContainerManager.Infrastructure.Repositories
 {
@@ -23,12 +20,7 @@ namespace ContainerManager.Infrastructure.Repositories
 		public async Task<IEnumerable<Domain.Models.Application>> GetByOwner(Guid userId)
 		{
 			return _mapper.Map<IEnumerable<Domain.Models.Application>>(await GetByQueryAsync(m => m.OwnerId == userId));
-		}
-
-		public async Task<Domain.Models.Application> GetByName(string name)
-		{
-			return _mapper.Map<Domain.Models.Application>(await GetSingleByQueryAsync(m => m.Name == name));
-		}
+		}		
 
 		public async Task AddAsync(Domain.Models.Application app)
 		{
@@ -42,13 +34,12 @@ namespace ContainerManager.Infrastructure.Repositories
 
 		public async Task UpdateOwnership(Guid currentOwnerId, Guid newOwnerId)
 		{
-			//Change ownership of user machines to newOwnerId
-			var userApps = _mapper.Map<IEnumerable<Domain.Models.Application>>(await GetByQueryAsync(m => m.OwnerId == currentOwnerId,
-																									avoidTracking: true));
+			//Change ownership of user applications to newOwnerId
+			var userApps = await GetByQueryAsync(m => m.OwnerId == currentOwnerId);
 			foreach (var app in userApps)
 			{
 				app.OwnerId = newOwnerId;
-				await UpdateAsync(app);
+				await base.UpdateAsync(app);
 			}
 		}
 
@@ -56,10 +47,10 @@ namespace ContainerManager.Infrastructure.Repositories
 		{
 			var existing = await GetByIdNoTrackingAsync(app.Id);
 
-			if (existing == null )
+			if (existing == null)
 				throw new RecordNotFoundException($"Application with Id '{app.Id}' does not exists");
 
-			existing.MachineId = app.Machine.Id;			
+			existing.MachineId = app.Machine.Id;
 
 			await base.UpdateAsync(_mapper.Map<Application>(existing));
 		}
@@ -67,6 +58,11 @@ namespace ContainerManager.Infrastructure.Repositories
 		public async Task DeleteAsync(Guid id)
 		{
 			await base.DeleteAsync(new Application { Id = id });
+		}
+
+		private async Task<Domain.Models.Application> GetByName(string name)
+		{
+			return _mapper.Map<Domain.Models.Application>(await GetSingleByQueryAsync(m => m.Name == name));
 		}
 	}
 }

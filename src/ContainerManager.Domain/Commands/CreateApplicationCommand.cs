@@ -1,8 +1,5 @@
 ﻿using ContainerManager.Domain.Models;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using static ContainerManager.Domain.Models.Application;
 
 namespace ContainerManager.Domain.Commands
 {
@@ -21,7 +18,7 @@ namespace ContainerManager.Domain.Commands
 		public string WorkingDirectory { get; set; }
 		public int CPULimit { get; set; }
 		public int MemoryMBLimit { get; set; }
-		public Guid OwnerId { get; set; }	
+		public Guid OwnerId { get; set; }
 
 		public readonly Guid Id;
 

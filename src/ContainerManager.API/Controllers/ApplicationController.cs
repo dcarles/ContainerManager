@@ -120,13 +120,13 @@ namespace ContainerManager.API.Controllers
 		public async Task<IActionResult> Patch([FromRoute] Guid applicationId,
 			[FromBody, CustomizeValidator(RuleSet = "Patch")] ApplicationRequest appRequest)
 		{
-			var applicationCommand = _mapper.Map<UpdateApplicationCommand>(appRequest);		
+			var applicationCommand = _mapper.Map<UpdateApplicationCommand>(appRequest);
 			applicationCommand.OwnerId = Guid.Parse(User.Identity.Name);
 			applicationCommand.Id = applicationId;
 
 			try
 			{
-				var applicationResponse = await _mediator.Send(applicationCommand);			
+				var applicationResponse = await _mediator.Send(applicationCommand);
 				return Ok(applicationResponse);
 			}
 			catch (RecordNotFoundException ex)
@@ -147,7 +147,7 @@ namespace ContainerManager.API.Controllers
 		[Authorize(Policy = Policies.OnlyApiOwners)]
 		[ApiExplorerSettings(GroupName = "Api Owner Only")]
 		[ProducesResponseType(200)]
-		[ProducesResponseType(typeof(ErrorResponse), 500)]		
+		[ProducesResponseType(typeof(ErrorResponse), 500)]
 		public async Task<IActionResult> Delete(Guid id)
 		{
 			var deleteCommand = new DeleteCommand<Application>(id, Guid.Parse(User.Identity.Name));

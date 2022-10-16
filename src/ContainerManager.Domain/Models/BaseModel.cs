@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ContainerManager.Domain.Models
+﻿namespace ContainerManager.Domain.Models
 {
 	public abstract class BaseModel
 	{

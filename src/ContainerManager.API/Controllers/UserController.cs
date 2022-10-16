@@ -51,7 +51,7 @@ namespace ContainerManager.API.Controllers
 		public async Task<IActionResult> Get(Guid id)
 		{
 			//If not Admin and try to get a different user than the one authenticated, then return forbidden error
-			if(!User.IsInRole(UserRole.ApiOwner.ToString()) && id != Guid.Parse(User.Identity.Name))
+			if (!User.IsInRole(UserRole.ApiOwner.ToString()) && id != Guid.Parse(User.Identity.Name))
 			{
 				return new ForbidResult();
 			}

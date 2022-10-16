@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ContainerManager.Domain.Models
+﻿namespace ContainerManager.Domain.Models
 {
 	public class Machine : BaseModel
 	{
 		public string Name { get; set; }
 		public OSType OS { get; set; }
-		public Guid OwnerId { get; set; }			
+		public Guid OwnerId { get; set; }
 
 	}
 

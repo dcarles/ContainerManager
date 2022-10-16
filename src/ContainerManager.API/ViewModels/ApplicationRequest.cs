@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using static ContainerManager.Domain.Models.Application;
 
 namespace ContainerManager.API.ViewModels
 {
@@ -14,7 +12,7 @@ namespace ContainerManager.API.ViewModels
 		public string WorkingDirectory { get; set; }
 		public int? CPULimit { get; set; }
 		public int? MemoryMBLimit { get; set; }
-		public Guid? MachineId { get; set; }		
+		public Guid? MachineId { get; set; }
 	}
 
 }

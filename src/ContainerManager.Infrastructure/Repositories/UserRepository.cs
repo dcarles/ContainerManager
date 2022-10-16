@@ -2,8 +2,6 @@
 using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Repositories;
 using ContainerManager.Infrastructure.Entities;
-using System;
-using System.Threading.Tasks;
 
 namespace ContainerManager.Infrastructure.Repositories
 {
@@ -13,7 +11,6 @@ namespace ContainerManager.Infrastructure.Repositories
 
 		public UserRepository(IMapper mapper, ContainerManagerDbContext dbContext) : base(dbContext) => _mapper = mapper;
 
-
 		public new async Task<Domain.Models.User> GetByIdAsync(Guid id)
 		{
 			return _mapper.Map<Domain.Models.User>(await base.GetByIdAsync(id));
@@ -22,11 +19,6 @@ namespace ContainerManager.Infrastructure.Repositories
 		public async Task<Domain.Models.User> GetByApiKey(string key)
 		{
 			return _mapper.Map<Domain.Models.User>(await base.GetSingleByQueryAsync(m => m.ApiKey == key));
-		}
-
-		public async Task<Domain.Models.User> GetByEmail(string email)
-		{
-			return _mapper.Map<Domain.Models.User>(await base.GetSingleByQueryAsync(m => m.Email == email));
 		}
 
 		public async Task AddAsync(Domain.Models.User user)
@@ -42,6 +34,11 @@ namespace ContainerManager.Infrastructure.Repositories
 		public async Task DeleteAsync(Guid id)
 		{
 			await base.DeleteAsync(new User { Id = id });
+		}
+
+		private async Task<Domain.Models.User> GetByEmail(string email)
+		{
+			return _mapper.Map<Domain.Models.User>(await base.GetSingleByQueryAsync(m => m.Email == email));
 		}
 	}
 }

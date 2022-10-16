@@ -19,7 +19,7 @@ namespace ContainerManager.UnitTests.Handlers
 		private readonly Machine _machine;
 
 		public CreateMachineHandlerTests()
-		{			
+		{
 			_fixture = new Fixture();
 			_machine = _fixture.Create<Machine>();
 			_mapperMock = new Mock<IMapper>();

@@ -1,6 +1,5 @@
 ﻿using ContainerManager.Domain.Models;
 using MediatR;
-using System;
 
 namespace ContainerManager.Domain.Commands
 {
@@ -15,7 +14,7 @@ namespace ContainerManager.Domain.Commands
 		public OSType OS { get; set; }
 
 		public readonly Guid Id;
-		public Guid OwnerId { get; set; }		
+		public Guid OwnerId { get; set; }
 
 	}
 }

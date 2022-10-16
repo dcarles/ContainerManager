@@ -1,9 +1,7 @@
 ﻿using AutoFixture;
 using ContainerManager.API.Validation;
 using ContainerManager.API.ViewModels;
-using FluentAssertions;
 using FluentValidation.TestHelper;
-using Moq;
 using Xunit;
 
 
@@ -29,7 +27,7 @@ namespace ContainerManager.UnitTests.Validators
 		{
 			_machineRequest.Name = name;
 			var result = _validator.TestValidate(_machineRequest);
-			result.ShouldHaveValidationErrorFor(request=>request.Name);
+			result.ShouldHaveValidationErrorFor(request => request.Name);
 		}
 
 		[Fact]

@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -48,9 +47,9 @@ namespace ContainerManager.UnitTests.Controllers
 
 			// Assert
 			Assert.IsType<NotFoundObjectResult>(userResponse);
-			Assert.IsType <ErrorResponse>(((NotFoundObjectResult)userResponse).Value);
+			Assert.IsType<ErrorResponse>(((NotFoundObjectResult)userResponse).Value);
 
-			_mediatorMock.Verify(m=>m.Send(It.IsAny<GetByIdQuery<User>>(), CancellationToken.None),Times.Once);
+			_mediatorMock.Verify(m => m.Send(It.IsAny<GetByIdQuery<User>>(), CancellationToken.None), Times.Once);
 		}
 
 		[Fact]
@@ -67,7 +66,7 @@ namespace ContainerManager.UnitTests.Controllers
 			var userResponse = await userControllerUnderTest.Get(otherUserId);
 
 			// Assert
-			Assert.IsType<ForbidResult>(userResponse);			
+			Assert.IsType<ForbidResult>(userResponse);
 
 			_mediatorMock.Verify(m => m.Send(It.IsAny<GetByIdQuery<User>>(), CancellationToken.None), Times.Never);
 		}
@@ -123,10 +122,10 @@ namespace ContainerManager.UnitTests.Controllers
 			_mediatorMock.Setup(med => med.Send(It.IsAny<CreateUserCommand>(), CancellationToken.None)).ReturnsAsync(user);
 
 			var userControllerUnderTest = new UserController(_loggerMock.Object, _mediatorMock.Object, _mapperMock.Object);
-			
+
 			var context = new ControllerContext
 			{
-				HttpContext = new DefaultHttpContext() {  }
+				HttpContext = new DefaultHttpContext() { }
 			};
 
 			userControllerUnderTest.ControllerContext = context;
@@ -149,7 +148,7 @@ namespace ContainerManager.UnitTests.Controllers
 			_mediatorMock.Setup(med => med.Send(It.IsAny<CreateUserCommand>(), CancellationToken.None)).ThrowsAsync(new RecordAlreadyExistsException());
 
 			var userControllerUnderTest = new UserController(_loggerMock.Object, _mediatorMock.Object, _mapperMock.Object);
-		
+
 			// Act
 			var userResponse = await userControllerUnderTest.Register(userRequest);
 

@@ -1,7 +1,6 @@
 ﻿using ContainerManager.Domain.Models;
 using ContainerManager.Domain.Services;
 using MediatR;
-using System;
 
 namespace ContainerManager.Domain.Commands
 {

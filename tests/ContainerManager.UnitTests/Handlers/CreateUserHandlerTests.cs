@@ -19,7 +19,7 @@ namespace ContainerManager.UnitTests.Handlers
 		private readonly User _user;
 
 		public CreateUserHandlerTests()
-		{			
+		{
 			_fixture = new Fixture();
 			_user = _fixture.Create<User>();
 			_mapperMock = new Mock<IMapper>();

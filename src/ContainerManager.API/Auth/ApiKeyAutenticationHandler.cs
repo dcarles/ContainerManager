@@ -10,7 +10,6 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ContainerManager.API.Auth
@@ -70,14 +69,14 @@ namespace ContainerManager.API.Auth
 		protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
 		{
 			Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-			Response.ContentType = ProblemDetailsContentType;			
+			Response.ContentType = ProblemDetailsContentType;
 
 			await Response.WriteAsync(new ErrorResponse
 			{
 				StatusCode = Response.StatusCode,
 				Message = "Unathorized. Invalid/Missing API Key"
 			}.ToString());
-		
+
 		}
 
 		protected override async Task HandleForbiddenAsync(AuthenticationProperties properties)

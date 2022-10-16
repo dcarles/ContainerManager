@@ -19,7 +19,7 @@ namespace ContainerManager.UnitTests.Handlers
 		private readonly Application _application;
 
 		public CreateApplicationHandlerTests()
-		{			
+		{
 			_fixture = new Fixture();
 			_application = _fixture.Create<Application>();
 			_mapperMock = new Mock<IMapper>();

@@ -47,9 +47,9 @@ namespace ContainerManager.UnitTests.Controllers
 
 			// Assert
 			Assert.IsType<NotFoundObjectResult>(machineResponse);
-			Assert.IsType <ErrorResponse>(((NotFoundObjectResult)machineResponse).Value);
+			Assert.IsType<ErrorResponse>(((NotFoundObjectResult)machineResponse).Value);
 
-			_mediatorMock.Verify(m=>m.Send(It.IsAny<GetByUserIdQuery<Machine>>(), CancellationToken.None),Times.Once);
+			_mediatorMock.Verify(m => m.Send(It.IsAny<GetByUserIdQuery<Machine>>(), CancellationToken.None), Times.Once);
 		}
 
 		[Fact]

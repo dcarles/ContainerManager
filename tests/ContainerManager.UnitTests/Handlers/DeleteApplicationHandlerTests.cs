@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using AutoMapper;
 using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Handlers;
 using ContainerManager.Domain.Models;
@@ -14,11 +13,11 @@ namespace ContainerManager.UnitTests.Handlers
 	public class DeleteApplicationHandlerTests
 	{
 		private readonly IFixture _fixture;
-		private readonly Mock<IApplicationRepository> _repoMock;		
+		private readonly Mock<IApplicationRepository> _repoMock;
 
 		public DeleteApplicationHandlerTests()
-		{			
-			_fixture = new Fixture();			
+		{
+			_fixture = new Fixture();
 			_repoMock = new Mock<IApplicationRepository>();
 		}
 

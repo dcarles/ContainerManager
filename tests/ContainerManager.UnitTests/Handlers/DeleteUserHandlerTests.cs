@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using AutoMapper;
 using ContainerManager.Domain.Commands;
 using ContainerManager.Domain.Handlers;
 using ContainerManager.Domain.Models;
@@ -19,8 +18,8 @@ namespace ContainerManager.UnitTests.Handlers
 		private readonly Mock<IApplicationRepository> _applicationRepoMock;
 
 		public DeleteUserHandlerTests()
-		{			
-			_fixture = new Fixture();			
+		{
+			_fixture = new Fixture();
 			_repoMock = new Mock<IUserRepository>();
 			_machineRepoMock = new Mock<IMachineRepository>();
 			_applicationRepoMock = new Mock<IApplicationRepository>();
@@ -37,7 +36,7 @@ namespace ContainerManager.UnitTests.Handlers
 			await handler.Handle(command, new CancellationToken());
 
 			//Assert
-			_applicationRepoMock.Verify(r => r.UpdateOwnership(command.Id,command.AuthUserId), Times.Once);
+			_applicationRepoMock.Verify(r => r.UpdateOwnership(command.Id, command.AuthUserId), Times.Once);
 			_machineRepoMock.Verify(r => r.UpdateOwnership(command.Id, command.AuthUserId), Times.Once);
 			_repoMock.Verify(r => r.DeleteAsync(command.Id), Times.Once);
 

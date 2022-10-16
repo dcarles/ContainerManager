@@ -4,8 +4,6 @@ using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Models;
 using ContainerManager.Domain.Repositories;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ContainerManager.Domain.Handlers
 {
@@ -26,7 +24,7 @@ namespace ContainerManager.Domain.Handlers
 		{
 			var machine = await _machineRepo.GetByIdAsync(request.MachineId);
 
-			if(machine == null)
+			if (machine == null)
 				throw new RecordNotFoundException($"Machine with Id '{request.MachineId}' does not exists");
 
 			var application = _mapper.Map<Application>(request);

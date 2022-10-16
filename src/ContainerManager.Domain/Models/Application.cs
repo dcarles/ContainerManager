@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ContainerManager.Domain.Models
+﻿namespace ContainerManager.Domain.Models
 {
 	public class Application : BaseModel
 	{

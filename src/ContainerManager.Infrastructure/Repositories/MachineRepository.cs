@@ -2,9 +2,6 @@
 using ContainerManager.Domain.Exceptions;
 using ContainerManager.Domain.Repositories;
 using ContainerManager.Infrastructure.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ContainerManager.Infrastructure.Repositories
 {
@@ -13,7 +10,6 @@ namespace ContainerManager.Infrastructure.Repositories
 		private readonly IMapper _mapper;
 
 		public MachineRepository(IMapper mapper, ContainerManagerDbContext dbContext) : base(dbContext) => _mapper = mapper;
-
 
 		public new async Task<Domain.Models.Machine> GetByIdAsync(Guid id)
 		{
@@ -25,48 +21,36 @@ namespace ContainerManager.Infrastructure.Repositories
 			return _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.OwnerId == userId));
 		}
 
-		public async Task<Domain.Models.Machine> GetByName(string name)
-		{
-			return _mapper.Map<Domain.Models.Machine>(await GetSingleByQueryAsync(m => m.Name == name));
-		}
-
 		public async Task AddAsync(Domain.Models.Machine machine)
 		{
 			var existing = await GetByName(machine.Name);
 
 			if (existing != null)
-				throw new RecordAlreadyExistsException($"Machine with Name '{machine.Name}' already exists");			
+				throw new RecordAlreadyExistsException($"Machine with Name '{machine.Name}' already exists");
 
 			await base.AddAsync(_mapper.Map<Machine>(machine));
 		}
 
 		public async Task UpdateOwnership(Guid currentOwnerId, Guid newOwnerId)
-		{			
+		{
 			//Change ownership of user machines to newOwnerId
-			var userMachines = _mapper.Map<IEnumerable<Domain.Models.Machine>>(await GetByQueryAsync(m => m.OwnerId == currentOwnerId, 
-																									avoidTracking:true));
+			var userMachines = await GetByQueryAsync(m => m.OwnerId == currentOwnerId);
 			foreach (var machine in userMachines)
 			{
 				machine.OwnerId = newOwnerId;
-				await UpdateAsync(machine);
-			}			
-		}
-
-		public async Task UpdateAsync(Domain.Models.Machine machine)
-		{
-			var existing = await GetByIdNoTrackingAsync(machine.Id);
-
-			if (existing == null)
-				throw new RecordNotFoundException($"Machine with Id '{machine.Id}' does not exists or you do not own it");
-
-			existing.OwnerId = machine.OwnerId;
-
-			await base.UpdateAsync(_mapper.Map<Machine>(existing));
+				await base.UpdateAsync(machine);
+			}
 		}
 
 		public async Task DeleteAsync(Guid id)
 		{
 			await base.DeleteAsync(new Machine { Id = id });
 		}
+
+		private async Task<Domain.Models.Machine> GetByName(string name)
+		{
+			return _mapper.Map<Domain.Models.Machine>(await GetSingleByQueryAsync(m => m.Name == name, avoidTracking: true));
+		}
+
 	}
 }

@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace ContainerManager.API
@@ -87,7 +86,7 @@ namespace ContainerManager.API
 						},
 						Array.Empty<string>()
 					}
-				});				
+				});
 
 				c.DocInclusionPredicate((name, api) => true);
 				c.UseInlineDefinitionsForEnums();
@@ -95,7 +94,7 @@ namespace ContainerManager.API
 				var xmlFile = $"ContainerManager.API.xml";
 				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 				c.IncludeXmlComments(xmlPath, true);
-			
+
 			});
 
 			services.AddHealthChecks();
