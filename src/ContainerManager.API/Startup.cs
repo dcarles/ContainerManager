@@ -177,6 +177,18 @@ namespace ContainerManager.API
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
+				endpoints.MapHealthChecks("/health/live", new HealthCheckOptions()
+				{
+					Predicate = (_) => false,
+					ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+				});
+
+				//In a real prod scenario this should check dependencies like DB connection and see if accessible.
+				endpoints.MapHealthChecks("/health/ready", new HealthCheckOptions()
+				{
+					Predicate = (_) => false,
+					ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+				});
 			});
 		}
 	}

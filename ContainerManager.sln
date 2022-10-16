@@ -9,11 +9,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E0CDA9C5-944
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D433EED1-CB02-4150-9254-ED24C3ABD130}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerManager.Domain", "src\ContainerManager.Domain\ContainerManager.Domain.csproj", "{7CA13FB0-4908-4419-B9F4-43F675440163}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContainerManager.Domain", "src\ContainerManager.Domain\ContainerManager.Domain.csproj", "{7CA13FB0-4908-4419-B9F4-43F675440163}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerManager.Infrastructure", "src\ContainerManager.Infrastructure\ContainerManager.Infrastructure.csproj", "{221161C9-1076-4BB8-83BA-54C672799052}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContainerManager.Infrastructure", "src\ContainerManager.Infrastructure\ContainerManager.Infrastructure.csproj", "{221161C9-1076-4BB8-83BA-54C672799052}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerManager.UnitTests", "tests\ContainerManager.UnitTests\ContainerManager.UnitTests.csproj", "{A09E1D48-CF12-4BCE-8524-DE1E06EBB99E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContainerManager.UnitTests", "tests\ContainerManager.UnitTests\ContainerManager.UnitTests.csproj", "{A09E1D48-CF12-4BCE-8524-DE1E06EBB99E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5D45342F-833A-422E-8D04-04E095590734}"
+	ProjectSection(SolutionItems) = preProject
+		ContainerManager.postman_collection.json = ContainerManager.postman_collection.json
+		docker-compose-api.yml = docker-compose-api.yml
+		docker-compose-db.yml = docker-compose-db.yml
+		Dockerfile-Api = Dockerfile-Api
+		Dockerfile-Db = Dockerfile-Db
+		ms-sql-entrypoint.sh = ms-sql-entrypoint.sh
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

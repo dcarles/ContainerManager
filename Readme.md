@@ -34,7 +34,7 @@ When the containers are running the urls below are ready to be used
 
 ```
 API	  : http://localhost:8080/api/
-MS SQL	  : localhost,1400
+MS SQL	  : localhost,1433
 ```
 `**NOTE!**`
 ```
@@ -254,7 +254,7 @@ I added 2 users when the application starts first time for test purposes. I gave
 If you would like to connect to SQL Server and see the data, please use following credentials. Please note that ms-sql docker container should be running in order to connect via below credentials:
 
 ```
-Server: localhost, 1400
+Server: localhost, 1433
 UserID : sa
 Password : Password123
 ```
