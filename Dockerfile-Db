@@ -6,15 +6,14 @@ RUN mkdir -p /docker-setup/ms-sql/usr/src/app
 WORKDIR /docker-setup/ms-sql/usr/src/app
 
 # Bundle app source
-COPY ./docker-setup/ms-sql/ /docker-setup/ms-sql/usr/src/app
-ADD ./docker-setup/ms-sql/entrypoint.sh /docker-setup/ms-sql/usr/src/app
+ADD ./ms-sql-entrypoint.sh /docker-setup/ms-sql/usr/src/app
 
 # Grant permissions for the import-data script to be executable
-RUN dos2unix /docker-setup/ms-sql/usr/src/app/entrypoint.sh
-RUN chmod +x /docker-setup/ms-sql/usr/src/app/entrypoint.sh
+RUN dos2unix /docker-setup/ms-sql/usr/src/app/ms-sql-entrypoint.sh
+RUN chmod +x /docker-setup/ms-sql/usr/src/app/ms-sql-entrypoint.sh
 
 EXPOSE 1433
-ENTRYPOINT ["/docker-setup/ms-sql/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["./ms-sql-entrypoint.sh"]
 
 # Tail the setup logs to trap the process
 CMD ["tail -f /dev/null"]

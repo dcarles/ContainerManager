@@ -4,7 +4,7 @@ services:
   ms-sql:
     build:
       context: .
-      dockerfile: ./docker-setup/ms-sql/Dockerfile
+      dockerfile: ./Dockerfile-Db
     container_name: ms-sql
     environment:
       - SA_PASSWORD=Password123

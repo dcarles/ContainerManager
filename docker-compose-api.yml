@@ -4,15 +4,15 @@ services:
   api:
     build:
       context: .
-      dockerfile: ./src/ContainerManager.API/Dockerfile
+      dockerfile: ./Dockerfile-Api
     container_name: containers-manager-api
     environment:
       - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://*:55100
+      - ASPNETCORE_URLS=http://*:8080
       - "CONFIG_ConnectionStrings:ContainersManagerDBConnectionString=Server=ms-sql;database=ContainersManagerDB;uid=sa;pwd=Password123"
-    ports:
-      - "55100:55100"
+    ports:    
+      - "8080:8080"
     depends_on:
       - ms-sql     
     networks:

@@ -33,6 +33,4 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 EXPOSE 8080
-EXPOSE 55100
-EXPOSE 443
 ENTRYPOINT ["dotnet", "ContainerManager.API.dll"]

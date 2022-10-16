@@ -33,7 +33,7 @@ Use following command to take containers down if you would like to start a fresh
 When the containers are running the urls below are ready to be used
 
 ```
-API	  : http://localhost:55100/api/
+API	  : http://localhost:8080/api/
 MS SQL	  : localhost,1400
 ```
 `**NOTE!**`
@@ -60,7 +60,7 @@ To make any request (except for creating new user which is public access), api k
 - ##### As an API consumer
 
 #####  I should be able to register as a [User]
-POST http://localhost:55100/api/user
+POST http://localhost:8080/api/user
 ```json
 {
   "email": "test@test.com",
@@ -76,7 +76,7 @@ POST http://localhost:55100/api/user
 409 - CONFLICT : If there is already a user with the same email
 
 ##### As a [User]; I should be able to create a [Machine] definition which I own
-POST http://localhost:55100/api/machine
+POST http://localhost:8080/api/machine
 
 HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 ```json
@@ -93,7 +93,7 @@ HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 409 - CONFLICT : If there is already a machine with the same name
 
 ##### As a [User]; I should be able to create an [Application] definition which I own.
-POST http://localhost:55100/api/application
+POST http://localhost:8080/api/application
 
 HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 ```json
@@ -116,7 +116,7 @@ HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 409 - CONFLICT : If there is already an application with the same name
 
 ##### As a [User]; I should be able to create an [Application] that can be ran on a [Machine]
-PATCH http://localhost:55100/api/application/{applicationId}
+PATCH http://localhost:8080/api/application/{applicationId}
 
 HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 ```json
@@ -133,14 +133,14 @@ HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 
 ##### As a [User]; I should be able to query the API for information about my [Application(s)] and [Machine(s)]
 
-GET http://localhost:55100/api/application
+GET http://localhost:8080/api/application
 
 HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 
 ######  HTTP Response Codes
 200 - OK  : Application updated successfully
 
-GET http://localhost:55100/api/machine
+GET http://localhost:8080/api/machine
 
 HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 ######  HTTP Response Codes
@@ -152,7 +152,7 @@ HEADER 'X-Api-Key': 'testConsumerApiKey3264'
 See above for endpoints to create entities. Just replace the api key with testOwnerApiKey3264 to use as an Api Owner
 
 ##### An API owner should be able to  remove [User(s)], [Machine(s)] and [Application(s)]
-DELETE http://localhost:55100/api/application/{applicationId}
+DELETE http://localhost:8080/api/application/{applicationId}
 
 HEADER 'X-Api-Key': 'testOwnerApiKey3264'
 
@@ -161,7 +161,7 @@ HEADER 'X-Api-Key': 'testOwnerApiKey3264'
 
 404 - NOT FOUND : Application not found
 
-DELETE http://localhost:55100/api/machine/{machineId}
+DELETE http://localhost:8080/api/machine/{machineId}
 
 HEADER 'X-Api-Key': 'testOwnerApiKey3264'
 
@@ -172,7 +172,7 @@ When deleting a Machine, the application definitions associated with it will be 
 
 404 - NOT FOUND : Machine not found
 
-DELETE http://localhost:55100/api/user/{userId}
+DELETE http://localhost:8080/api/user/{userId}
 
 HEADER 'X-Api-Key': 'testOwnerApiKey3264'
 
